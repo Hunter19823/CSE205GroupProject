@@ -2,13 +2,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommonWorkerThread extends Thread implements Subject<CommonWorkerThread,Object>{
-    // Logger for this class.
-    //private final static Logger LOGGER = LoggerFactory.getLogger(ServerListenerThread.class);
 
     // Private fields.
     private Socket socket;
@@ -17,7 +14,7 @@ public class CommonWorkerThread extends Thread implements Subject<CommonWorkerTh
     private List<IObserver> observers = new ArrayList<>();
 
 
-    public CommonWorkerThread(Socket socket) throws IOException
+    public CommonWorkerThread(Socket socket)
     {
         this.socket = socket;
         //this.socket.setKeepAlive(true);
@@ -30,11 +27,13 @@ public class CommonWorkerThread extends Thread implements Subject<CommonWorkerTh
         try {
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-            //this.socket.setKeepAlive(true);
+
             Object message;
+            // Send the first message.
             writeMessage("Ping!");
             while(socket.isConnected() && socket.isBound() && !socket.isClosed()){
                 if((message = readMessage()) != null){
+                    // Notify any observers of new messages.
                     notifyUpdate(message);
                 }
             }
@@ -43,7 +42,7 @@ public class CommonWorkerThread extends Thread implements Subject<CommonWorkerTh
             // Log any errors.
             System.err.println("Problem with setting socket "+e.toString());
         } finally {
-            // Close the server socket when finally finished.
+            // Close the socket when finally finished.
             close();
         }
         System.out.println("Finished with socket.");
@@ -57,6 +56,7 @@ public class CommonWorkerThread extends Thread implements Subject<CommonWorkerTh
             e.printStackTrace();
         } catch (IOException e) {
             //e.printStackTrace();
+            //The line above will spam console.
         }
 
         return null;
