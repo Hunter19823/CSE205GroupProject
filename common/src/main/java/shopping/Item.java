@@ -10,10 +10,11 @@ import java.util.*;
 public class Item implements IPackager, ISubject {
     private static final Map<String,Item> CACHED_ITEMS = new HashMap<>();
     private final Map<Message.Topic, List<IObserver>> observers = new LinkedHashMap<>();
-    private String uuid;
+    private String uuid = null;
     private String name;
     private String description;
     private int quantity;
+    private int price;
 
     private Item()
     {
@@ -22,22 +23,27 @@ public class Item implements IPackager, ISubject {
 
     public String getUuid()
     {
-        return uuid;
+        return this.uuid;
     }
 
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
     public String getDescription()
     {
-        return description;
+        return this.description;
     }
 
     public int getQuantity()
     {
-        return quantity;
+        return this.quantity;
+    }
+
+    public int getPrice()
+    {
+        return this.price;
     }
 
     @Override

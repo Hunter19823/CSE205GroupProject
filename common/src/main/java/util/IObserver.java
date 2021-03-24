@@ -2,5 +2,5 @@ package util;
 
 @FunctionalInterface
 public interface IObserver {
-    void update(Message message);
+    void update(Message<?> message);
 }
