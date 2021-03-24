@@ -1,3 +1,5 @@
+package connection;
+
 public interface Subject<C,D> {
 
     void attach( IObserver<C,D> IObserver );

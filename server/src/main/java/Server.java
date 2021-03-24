@@ -1,3 +1,5 @@
+import connection.CommonWorkerThread;
+
 import java.io.IOException;
 
 public class Server {
@@ -16,7 +18,7 @@ public class Server {
 
 
 
-    public static void onMessage(CommonWorkerThread workerThread, Object message){
+    public static void onMessage( CommonWorkerThread workerThread, Object message){
         System.out.println("Received Message: "+message);
         if(message instanceof String){
             switch((String)message){
