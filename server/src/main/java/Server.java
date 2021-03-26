@@ -1,35 +1,14 @@
-import connection.CommonWorkerThread;
-
-import java.io.IOException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class Server {
+    private static final Logger LOGGER = LogManager.getLogger(Server.class);
     public static void main(String[] args)
     {
-        System.out.println("Hello server.");
-        System.out.println("Server Starting...");
-        try{
-            ServerListenerThread listenerThread = new ServerListenerThread(48576,"localhost");
-            listenerThread.start();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        System.out.println("All Servers Finished.");
-    }
-
-
-
-    public static void onMessage( CommonWorkerThread workerThread, Object message){
-        System.out.println("Received Message: "+message);
-        if(message instanceof String){
-            switch((String)message){
-                case "Pong!":
-                    workerThread.writeMessage("Silence");
-                    workerThread.close();
-                    break;
-                case "Close":
-                    workerThread.close();
-                    break;
-            }
-        }
+        LOGGER.info("Hello from server.");
+        LOGGER.info("Info");
+        LOGGER.warn("Warning");
+        LOGGER.error("Error!");
+        LOGGER.debug("Debug.");
     }
 }

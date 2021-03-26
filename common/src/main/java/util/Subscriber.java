@@ -1,15 +1,19 @@
 package util;
 
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 public abstract class Subscriber implements ISubscriber {
-    private List<Message> messageList = new LinkedList<>();
+    private static final Logger LOGGER = LogManager.getLogger(Subscriber.class);
+    private List<Message<?>> messageList = new LinkedList<>();
 
     @Override
-    public List<Message> getSubscriberMessages()
+    public List<Message<?>> getSubscriberMessages()
     {
         return this.messageList;
     }
@@ -33,11 +37,11 @@ public abstract class Subscriber implements ISubscriber {
     }
 
     @Override
-    public List<Message> getMessagesByTopic( Message.Topic topic )
+    public List<Message<?>> getMessagesByTopic( Message.Topic topic )
     {
-        ListIterator<Message> listIterator = messageList.listIterator();
-        List<Message> output = new LinkedList<>();
-        Message message;
+        ListIterator<Message<?>> listIterator = messageList.listIterator();
+        List<Message<?>> output = new LinkedList<>();
+        Message<?> message;
         while(listIterator.hasNext()) {
             message = listIterator.next();
             if (message.Topic.equals(topic))

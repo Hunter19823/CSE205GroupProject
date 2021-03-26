@@ -1,56 +1,12 @@
 package util;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 public class Message<PAY_LOAD> {
-    public enum Topic {
-        CART_UPDATE,
-            CART_ADD_ITEM,
-            CART_REMOVE_ITEM,
-            CART_MODIFY_QUANTITY,
+    private static final Logger LOGGER = LogManager.getLogger(Message.class);
+    public interface Topic { }
 
-        CLIENT_RECEIVE_SERVER_RESPONSE,
-        CLIENT_REQUEST_SERVER_ACTION,
-
-            CLIENT_REQUEST_REGISTRATION,
-            CLIENT_RECEIVE_REGISTRATION,
-
-            CLIENT_REQUEST_TOKEN,
-            CLIENT_RECEIVE_TOKEN,
-
-            CLIENT_REQUEST_ITEM_DATA,
-            CLIENT_RECEIVE_ITEM_DATA,
-
-            CLIENT_REQUEST_SYNC_CART_DATA,
-            CLIENT_RECEIVE_SYNC_CART_DATA,
-
-            CLIENT_REQUEST_CART_DATA,
-            CLIENT_RECEIVE_CART_DATA,
-
-            CLIENT_REQUEST_CHECKOUT,
-            CLIENT_RECEIVE_CHECKOUT,
-
-        SERVER_RECEIVE_CLIENT_ACTION,
-
-            SERVER_RECEIVE_CLIENT_REQUEST_REGISTRATION,
-            SERVER_RESPONSE_CLIENT_REQUEST_REGISTRATION,
-
-            SERVER_RECEIVE_CLIENT_REQUEST_TOKEN,
-            SERVER_RESPONSE_CLIENT_REQUEST_TOKEN,
-
-            SERVER_RECEIVE_CLIENT_REQUEST_ITEM_DATA,
-            SERVER_RESPONSE_CLIENT_REQUEST_ITEM_DATA,
-
-            SERVER_RECEIVE_REQUEST_SYNC_CART_DATA,
-            SERVER_RESPONSE_CLIENT_REQUEST_SYNC_CART_DATA,
-
-            SERVER_RECEIVE_CLIENT_REQUEST_CHECKOUT,
-            SERVER_RESPONSE_CLIENT_REQUEST_CHECKOUT,
-
-        SERVER_RECEIVE_DATABASE_RESPONSE,
-        SERVER_REQUEST_DATABASE_ACTION,
-
-        ;
-
-    }
     public final Topic Topic;
     public final PAY_LOAD CONTENTS;
     public Message( Topic topic, PAY_LOAD contents)

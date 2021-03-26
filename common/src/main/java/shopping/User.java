@@ -1,5 +1,7 @@
 package shopping;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import util.IObserver;
 import util.IPackager;
 import util.ISubject;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class User implements IPackager, ISubject {
+    private static final Logger LOGGER = LogManager.getLogger(User.class);
     private static User INSTANCE;
     private final Map<Message.Topic, List<IObserver>> observers = new LinkedHashMap<>();
     private String uuid;

@@ -1,5 +1,7 @@
 package shopping;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import util.IObserver;
 import util.IPackager;
 import util.ISubject;
@@ -8,6 +10,7 @@ import util.Message;
 import java.util.*;
 
 public class Item implements IPackager, ISubject {
+    private static final Logger LOGGER = LogManager.getLogger(Item.class);
     private static final Map<String,Item> CACHED_ITEMS = new HashMap<>();
     private final Map<Message.Topic, List<IObserver>> observers = new LinkedHashMap<>();
     private String uuid = null;

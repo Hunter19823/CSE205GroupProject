@@ -1,8 +1,12 @@
 package util;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 public class PubSubService {
+    private static final Logger LOGGER = LogManager.getLogger(PubSubService.class);
     private final Map<Message.Topic, Set<ISubscriber>> topicMap = new HashMap<>();
     private Queue<Message> messageQueue = new LinkedList<>();
 

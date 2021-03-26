@@ -1,5 +1,7 @@
 package shopping;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import util.IObserver;
 import util.IPackager;
 import util.ISubject;
@@ -8,9 +10,18 @@ import util.Message;
 import java.util.*;
 
 public class Cart implements IPackager , ISubject {
+    private static final Logger LOGGER = LogManager.getLogger(Cart.class);
     private static Cart INSTANCE;
     private final Map<Message.Topic, List<IObserver>> observers = new LinkedHashMap<>();
     private List<Item> contents;
+
+    public enum CartTopic implements Message.Topic
+    {
+        CART_UPDATE,
+        CART_ADD_ITEM,
+        CART_REMOVE_ITEM,
+        CART_MODIFY_QUANTITY;
+    }
 
     private Cart()
     {
@@ -30,12 +41,13 @@ public class Cart implements IPackager , ISubject {
 
     public void removeItem( Item item ) throws ShoppingException
     {
-
+        contents.remove(item);
+        notifyUpdate(new Message<Item>(CartTopic.CART_REMOVE_ITEM,item));
     }
 
     public void removeItem( int index ) throws ShoppingException
     {
-
+        notifyUpdate(new Message<Item>(CartTopic.CART_REMOVE_ITEM,contents.remove(index)));
     }
 
     public void modify( int index, int quantity) throws ShoppingException
