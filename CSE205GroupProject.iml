@@ -20,5 +20,13 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.postgresql:postgresql:42.2.5" level="project" />
     <orderEntry type="library" name="log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="org.springframework.boot:spring-boot-starter-data-rest:RELEASE" level="project" />
+    <orderEntry type="library" name="org.springframework.boot:spring-boot-starter-data-jpa:RELEASE" level="project" />
+    <orderEntry type="library" name="org.springframework.boot:spring-boot-autoconfigure:RELEASE" level="project" />
+    <orderEntry type="library" name="org.springframework.boot:spring-boot-starter-security:RELEASE" level="project" />
+    <orderEntry type="library" name="org.springframework.boot:spring-boot-starter-thymeleaf:RELEASE" level="project" />
+    <orderEntry type="library" name="org.springframework.boot:spring-boot:RELEASE" level="project" />
+    <orderEntry type="library" name="org.springframework:spring-core:5.3.1" level="project" />
+    <orderEntry type="library" name="javax.xml.bind:jaxb-api:2.3.0" level="project" />
   </component>
 </module>
