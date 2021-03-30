@@ -1,0 +1,33 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Items</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
+</head>
+<body>
+<h1>Items</h1>
+
+<nav>
+    <ul class="pagination" th:with="total = ${items.totalPages}">
+        <li th:if="${items.hasPrevious()}">
+            <a th:href="@{/users(page=${items.previousPageable().pageNumber},size=${items.size})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li th:each="page : ${#numbers.sequence(0, total - 1)}"><a th:href="@{/items(page=${page},size=${items.size})}" th:text="${page + 1}">1</a></li>
+        <li th:if="${items.hasNext()}">
+            <a th:href="@{/items(page=${items.nextPageable().pageNumber},size=${items.size})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<ol>
+    <li th:each="item, it : ${items}" th:with="index = ${it.count}" th:text="${item.name + ' - ' + item.description}" th:value="${items.number * items.size + index}">Item Name</li>
+</ol>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 package shopping;
 
+import example.Item;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import util.IObserver;

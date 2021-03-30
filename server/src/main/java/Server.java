@@ -1,4 +1,4 @@
-import example.TestSpringBootApplication;
+import example.TestApplication;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +13,6 @@ public class Server {
         LOGGER.warn("Warning");
         LOGGER.error("Error!");
         LOGGER.debug("Debug.");
-        SpringApplication.run(TestSpringBootApplication.class,args);
+        SpringApplication.run(TestApplication.class,args);
     }
 }
