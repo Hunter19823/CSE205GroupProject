@@ -1,23 +1,25 @@
 package example;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
 import javax.persistence.Embeddable;
 
+@EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter(AccessLevel.PACKAGE)
 @Embeddable
 public class Password implements CharSequence{
 
     private final String password;
     private transient boolean encrypted;
 
-    Password()
+    public Password()
     {
         this.password = null;
         this.encrypted = true;
-    }
-
-    private Password(String password, boolean encrypted)
-    {
-        this.password = password;
-        this.encrypted = encrypted;
     }
 
     public static Password raw( String password)
@@ -25,14 +27,9 @@ public class Password implements CharSequence{
         return new Password(password,false);
     }
 
-    static Password encrypted(String password)
+    public static Password encrypted(String password)
     {
         return new Password(password, true);
-    }
-
-    public boolean isEncrypted()
-    {
-        return encrypted;
     }
 
     @Override

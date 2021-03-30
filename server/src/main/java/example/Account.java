@@ -2,31 +2,24 @@ package example;
 
 
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@RequiredArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@EqualsAndHashCode(of = "id")
 public class Account {
-    private @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    @Id
-    Long id;
+    private @GeneratedValue(strategy = GenerationType.IDENTITY) @Id Long id;
     private final Username username;
     private final Password password;
 
-    Account() {
+    public Account() {
+        this.id = 0L;
         this.username = null;
         this.password = null;
-    }
-
-    Account(Username username, Password password)
-    {
-        this.username = username;
-        this.password = password;
-    }
-    Account(Long id, Username username, Password password)
-    {
-        this.id = id;
-        this.username = username;
-        this.password = password;
     }
 
     public Long getId()

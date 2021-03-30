@@ -4,6 +4,9 @@ import example.Account;
 import example.AccountManagement;
 import example.Password;
 import example.Username;
+import lombok.RequiredArgsConstructor;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,14 +21,11 @@ import org.springframework.web.servlet.view.RedirectView;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class AccountController {
+    private final Logger LOGGER = LogManager.getLogger(AccountController.class);
     private final AccountManagement accountManagement;
-
-    AccountController( AccountManagement accountManagement )
-    {
-        this.accountManagement = accountManagement;
-    }
 
     @ModelAttribute("users")
     public Page<Account> users( @PageableDefault(size = 5) Pageable pageable )
@@ -35,10 +35,11 @@ public class AccountController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Object register( UserForm userForm, BindingResult binding, Model model) {
+        LOGGER.info("Register Request has been Received. "+userForm.toString());
         userForm.validate(binding, accountManagement);
 
         if (binding.hasErrors()) {
-            return "users";
+            return "";
         }
 
         accountManagement.register(new Username(userForm.getUsername()), Password.raw(userForm.getPassword()));

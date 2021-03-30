@@ -17,7 +17,7 @@ public class TestSpringBootApplication {
     {}
 
     @Autowired
-    AccountManagement accountManagement;
+    public AccountManagement accountManagement;
 
     @PostConstruct
     public void init(){

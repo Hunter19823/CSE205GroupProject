@@ -1,19 +1,16 @@
 package example;
 
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Embeddable;
 
-
+@EqualsAndHashCode
 @Embeddable
 public class Username {
     private final String username;
-    Username()
+    public Username()
     {
         this.username = null;
-    }
-
-    public String getUsername()
-    {
-        return username;
     }
 
     public Username( String username)

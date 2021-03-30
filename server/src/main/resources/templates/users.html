@@ -11,15 +11,12 @@
 
 <nav>
     <ul class="pagination" th:with="total = ${users.totalPages}">
-        <!--/*@thymesVar id="users" type="org.springframework.data.domain.Pageable"*/-->
         <li th:if="${users.hasPrevious()}">
-            <!--/*@thymesVar id="users" type="org.springframework.data.domain.Page"*/-->
             <a th:href="@{/users(page=${users.previousPageable().pageNumber},size=${users.size})}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         <li th:each="page : ${#numbers.sequence(0, total - 1)}"><a th:href="@{/users(page=${page},size=${users.size})}" th:text="${page + 1}">1</a></li>
-        <!--/*@thymesVar id="users" type="org.springframework.data.domain.Page"*/-->
         <li th:if="${users.hasNext()}">
             <a th:href="@{/users(page=${users.nextPageable().pageNumber},size=${users.size})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -29,15 +26,11 @@
 </nav>
 
 <ol>
-    <!--/*@thymesVar id="users" type="org.springframework.data.domain.Page"*/-->
-    <!--/*@thymesVar id="user" type="example.Account"*/-->
+
     <li th:each="user, it : ${users}" th:with="index = ${it.count}" th:text="${user.username + ' - ' + user.password}" th:value="${users.number * users.size + index}">Username</li>
 </ol>
 
-<!--/*@thymesVar id="page" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="users" type="org.springframework.data.domain.Page"*/-->
-<!--/*@thymesVar id="size" type="java.lang.Integer"*/-->
-<!--/*@thymesVar id="userForm" type="example.Account"*/-->
+
 <form method="post" role="form" class="gb-form" id="form" th:action="@{/users(page=${page},size=${users.size})}" th:object="${userForm}">
 
     <ul th:if="${#fields.hasErrors('*')}" class="errors" >

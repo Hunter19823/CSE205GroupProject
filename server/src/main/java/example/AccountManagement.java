@@ -1,26 +1,23 @@
 package example;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.transaction.Transactional;
+
 import java.util.Optional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class AccountManagement {
 
     private final AccountRepository repository;
     private final PasswordEncoder encoder;
-
-    public AccountManagement(AccountRepository repository, PasswordEncoder encoder)
-    {
-        this.repository = repository;
-        this.encoder = encoder;
-    }
 
     public Account register(Username username, Password password)
     {
