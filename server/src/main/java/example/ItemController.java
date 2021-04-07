@@ -26,7 +26,7 @@ public class ItemController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String listUsers( Model model) {
+    public String listItems( Model model) {
 
         return "items";
     }
