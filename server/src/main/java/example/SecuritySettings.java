@@ -1,13 +1,16 @@
 package example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.util.Collection;
@@ -15,23 +18,50 @@ import java.util.Collection;
 @Configuration
 public class SecuritySettings extends WebSecurityConfigurerAdapter {
 
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new example.UserDetailsService();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setUserDetailsService(userDetailsService());
+
+        return authenticationProvider;
+    }
+
+
     @Override
     protected void configure( HttpSecurity http ) throws Exception
     {
         http
                 .authorizeRequests()
-                    .antMatchers("/register","/login", "/home", "/").permitAll()
-                    .antMatchers("/items").hasRole("USER")
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                    .antMatchers("/items").authenticated()
+                    .anyRequest().permitAll()
                     .and()
                 .formLogin()
-                    .loginPage("/login");
+                    .usernameParameter("email")
+                    .defaultSuccessUrl("/items")
+                    .permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll();
     }
 
     @Override
     public void configure( AuthenticationManagerBuilder builder) throws Exception
     {
-        builder.jdbcAuthentication().dataSource(( DataSource ) this.getApplicationContext().getBean("dataSource"));
+        builder.authenticationProvider(authenticationProvider());
+        //builder.jdbcAuthentication().dataSource(( DataSource ) this.getApplicationContext().getBean("dataSource"));
     }
 }

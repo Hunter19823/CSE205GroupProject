@@ -17,4 +17,9 @@ public class GreetingController {
     {
         return new Greeting(counter.incrementAndGet(),String.format(template,name));
     }
+
+    @GetMapping("")
+    public String viewHomePage() {
+        return "index";
+    }
 }

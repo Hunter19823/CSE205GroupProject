@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "accounts", schema = "\"authorization\"")
+@Table(name = "users")
 public class UserAccount {
 
     private static final Logger LOGGER = LogManager.getLogger(UserAccount.class);
