@@ -26,15 +26,13 @@ public class AccountController {
     }
 
     @PostMapping("/process_register")
-    public Object processRegister( UserAccount userAccount )
+    public String processRegister( UserAccount userAccount )
     {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(userAccount.getPassword());
+
         authorizationManagement.registerUser(userAccount.getUsername(),encodedPassword);
 
-        RedirectView redirectView = new RedirectView("redirect:/login");
-        redirectView.setPropagateQueryParams(true);
-
-        return redirectView;
+        return "items";
     }
 }
