@@ -3,7 +3,7 @@ body {
 	width: 50%;
 }
 
-form.userAccount-form {
+spring.form.userAccount-spring.form {
 	padding: 9px 14px;
 	border: 1px solid #e1e1e8;
 	border-radius: 4px;
