@@ -9,6 +9,7 @@ import java.util.Collection;
 public class AccountDAO implements UserDetails {
     private Account account;
 
+
     public AccountDAO( Account account)
     {
         this.account = account;
