@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import spring.form.AccountForm;
 import spring.manager.AccountManager;
 
@@ -16,10 +14,18 @@ import spring.manager.AccountManager;
 public class AccountController {
     private final AccountManager accountManager;
 
-    public AccountController( AccountManager accountManager)
+    public AccountController( AccountManager accountManager )
     {
         this.accountManager = accountManager;
     }
+
+    @PostMapping( "/login" )
+    public String onLogin( Model model )
+    {
+
+        return "/items";
+    }
+
 
     @GetMapping("/register")
     public String showRegisterForm( Model model )

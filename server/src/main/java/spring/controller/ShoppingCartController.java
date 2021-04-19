@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 
 @Controller
 @Transactional
+@RequestMapping("/shoppingCart")
 public class ShoppingCartController {
     private final ItemManager itemManager;
     private final AccountManager accountManager;
