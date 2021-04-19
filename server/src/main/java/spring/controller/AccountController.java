@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import spring.form.AccountForm;
+import spring.form.LoginForm;
 import spring.manager.AccountManager;
 
 @Controller
@@ -19,11 +20,19 @@ public class AccountController {
         this.accountManager = accountManager;
     }
 
-    @PostMapping( "/login" )
-    public String onLogin( Model model )
+    @GetMapping( "/login" )
+    public String onLoginRequest( Model model )
     {
+        model.addAttribute("login", new LoginForm());
 
-        return "/items";
+        return "login";
+    }
+
+    @PostMapping( "/login" )
+    public String onLoginPost( Model model )
+    {
+        System.out.println(model);
+        return "login";
     }
 
 

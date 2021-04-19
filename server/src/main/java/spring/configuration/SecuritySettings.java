@@ -49,17 +49,21 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
     protected void configure( HttpSecurity http ) throws Exception
     {
         http
+                .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/register").permitAll()
+                    .antMatchers("/register","/login").permitAll()
                     .anyRequest().authenticated()
                     .and()
-                .formLogin()
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .failureForwardUrl("/register")
-                    .defaultSuccessUrl("/items")
-                    .permitAll()
-                .and()
+                .formLogin(
+                        httpSecurityFormLoginConfigurer -> {
+                            httpSecurityFormLoginConfigurer.loginPage("/login");
+                            httpSecurityFormLoginConfigurer.permitAll();
+                            httpSecurityFormLoginConfigurer.defaultSuccessUrl("/items");
+                            httpSecurityFormLoginConfigurer.usernameParameter("username");
+                            httpSecurityFormLoginConfigurer.passwordParameter("password");
+                            httpSecurityFormLoginConfigurer.failureForwardUrl("/register");
+                        }
+                )
                 .logout().logoutSuccessUrl("/").permitAll();
     }
 

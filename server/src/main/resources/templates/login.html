@@ -2,7 +2,7 @@
 <html lang xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Spring Security Example </title>
+    <title>Login Page</title>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -44,7 +44,7 @@
     }
 
     /* Sign in button */
-    signin {
+    button.signin {
         background-color: #4CAF50;
         border-radius: 8px;
         width: 50%;
@@ -94,18 +94,18 @@
 
 <body>
 
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/login}" method="post" th:object="${login}">
         <h2 style = "text-align: center">Login Form</h2>
         <div class = "container" style = "text-align: center;">
 
             <!--Username-->
             <label for= "uname"><b>Username</b></label>
-            <input type="text" placeholder = "Username" id="uname" required>
+            <input type="text" placeholder = "Username" id="uname" th:field="*{username}" required>
                 <div></div>
 
             <!--Password-->
             <label for="psw"><b>Password</b></label>
-            <input type= "password" placeholder= "Password" id = "psw" required>
+            <input type= "password" th:field="*{password}" placeholder= "Password" id = "psw" required>
 
                 <!--Errors-->
                 <div style = "text-align: center;" th:if="${param.error}">
@@ -116,7 +116,7 @@
                 </div>
 
             <!--Sign in Button-->
-            <signin type ="submit">Sign in</signin>
+            <button class = "signin" type = "submit">Sign in</button>
         </div>
 
         <!--Second Container--
