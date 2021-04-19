@@ -28,13 +28,6 @@ public class AccountController {
         return "login";
     }
 
-    @PostMapping( "/login" )
-    public String onLoginPost( Model model )
-    {
-        System.out.println(model);
-        return "login";
-    }
-
 
     @GetMapping("/register")
     public String showRegisterForm( Model model )
@@ -50,6 +43,7 @@ public class AccountController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(accountForm.getPassword());
 
+        System.out.println("Processing Register");
         accountManager.registerAccount(
                 accountForm.getUsername(),
                 encodedPassword,

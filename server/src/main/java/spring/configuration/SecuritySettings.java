@@ -51,7 +51,7 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/register","/login").permitAll()
+                    .antMatchers("/register","/process_register","/login").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin(
@@ -59,9 +59,6 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
                             httpSecurityFormLoginConfigurer.loginPage("/login");
                             httpSecurityFormLoginConfigurer.permitAll();
                             httpSecurityFormLoginConfigurer.defaultSuccessUrl("/items");
-                            httpSecurityFormLoginConfigurer.usernameParameter("username");
-                            httpSecurityFormLoginConfigurer.passwordParameter("password");
-                            httpSecurityFormLoginConfigurer.failureForwardUrl("/register");
                         }
                 )
                 .logout().logoutSuccessUrl("/").permitAll();
