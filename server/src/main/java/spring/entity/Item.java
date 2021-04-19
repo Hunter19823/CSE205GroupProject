@@ -1,6 +1,6 @@
 package spring.entity;
 
-import lombok.EqualsAndHashCode;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity // https://www.objectdb.com/api/java/jpa/Entity
-@EqualsAndHashCode(of = "UUID")
 @Table(name = "ITEMS", schema="store") // https://www.objectdb.com/api/java/jpa/Table
 public class Item {
     private static final Logger LOGGER = LogManager.getLogger(Item.class);

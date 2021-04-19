@@ -6,29 +6,31 @@ import org.apache.logging.log4j.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class Account {
 
     private static final Logger LOGGER = LogManager.getLogger(Account.class);
 
     @Id
-    @Column(nullable = false, unique = true, length = 45)
+    @Column(nullable = false, unique = true, length = 45, name = "username")
     private String username;
 
-    @Column(nullable = false, length = 64)
+    @Column(nullable = false, length = 64, name = "password")
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "enabled")
     private boolean enabled = true;
 
-    @Column()
+    @Column(length = 20, name = "firstname")
     private String firstName;
-    @Column()
+    @Column(length = 20, name = "lastname")
     private String lastName;
-    @Column()
+    @Column(length = 320, name = "email")
     private String email;
-    @Column()
+    @Column(nullable = false, length = 320, name = "address")
     private String address;
 
     public Account()

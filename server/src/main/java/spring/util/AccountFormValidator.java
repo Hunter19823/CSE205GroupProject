@@ -45,10 +45,12 @@ public class AccountFormValidator implements Validator {
         AccountForm form = (AccountForm) target;
 
         // TODO
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"username", "");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"email", "");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"address", "");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"username", "EmptyOrWhite.username");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"email", "EmptyOrWhite.email");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"address", "EmptyOrWhite.address");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "EmptyOrWhite.firstName");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "EmptyOrWhite.lastName");
+
+
     }
 }

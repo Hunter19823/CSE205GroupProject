@@ -31,6 +31,7 @@ public class ShoppingCartInfo {
     public void addItem( ItemInfo item, int quantity)
     {
         // TODO
+
     }
 
     public void updateItem( ItemInfo item, int quantity)

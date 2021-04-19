@@ -1,6 +1,5 @@
 package spring.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -10,10 +9,14 @@ import spring.util.ItemFormValidator;
 
 @Controller
 public class ValidationConfiguration {
-    @Autowired
-    private AccountFormValidator accountFormValidator;
-    @Autowired
-    private ItemFormValidator itemFormValidator;
+    private final AccountFormValidator accountFormValidator;
+    private final ItemFormValidator itemFormValidator;
+
+    public ValidationConfiguration( AccountFormValidator accountFormValidator, ItemFormValidator itemFormValidator )
+    {
+        this.accountFormValidator = accountFormValidator;
+        this.itemFormValidator = itemFormValidator;
+    }
 
     @InitBinder
     public void dataBinder( WebDataBinder dataBinder )

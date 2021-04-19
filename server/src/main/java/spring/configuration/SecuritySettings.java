@@ -50,11 +50,13 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
     {
         http
                 .authorizeRequests()
-                    .antMatchers("/items").authenticated()
-                    .anyRequest().permitAll()
+                    .antMatchers("/register").permitAll()
+                    .anyRequest().authenticated()
                     .and()
                 .formLogin()
-                    .usernameParameter("email")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .failureForwardUrl("/register")
                     .defaultSuccessUrl("/items")
                     .permitAll()
                 .and()
