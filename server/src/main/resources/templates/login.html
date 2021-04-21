@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Login Page</title>
 </head>
@@ -58,7 +58,7 @@
     }
 
     /* New member button */
-    newbtn {
+    button.newbtn {
         margin-right: 10%;
         background-color: white;
         border: 1px solid #ccc;
@@ -67,7 +67,7 @@
     }
 
     /* Employee login button */
-    empbtn {
+    button.empbtn {
 
         background-color: white;
         border: 1px solid #ccc;
@@ -99,13 +99,14 @@
         <div class = "container" style = "text-align: center;">
 
             <!--Username-->
-            <label for= "uname"><b>Username</b></label>
-            <input type="text" placeholder = "Username" id="uname" th:field="*{username}" required>
-                <div></div>
+            <label for= "username"><b>Username</b></label>
+            <input type="text" th:field="*{username}" placeholder = "Username" id="username" name="username"
+                   class="form-control" required autofocus/> </br>
 
             <!--Password-->
-            <label for="psw"><b>Password</b></label>
-            <input type= "password" th:field="*{password}" placeholder= "Password" id = "psw" required>
+            <label for="password"><b>Password</b></label>
+            <input type= "password" th:field="*{password}" placeholder= "Password" id = "password" name="password"
+                   class="form-control" required autofocus/> </br>
 
                 <!--Errors-->
                 <div style = "text-align: center;" th:if="${param.error}">
@@ -124,8 +125,8 @@
             --Placement issues when resizing window--NOT A CONCERN--
             --hrefs not implemented-->
         <div class = "container" style = "padding:25px; background-color:#f1f1f1">
-            <newbtn onclick= location.href='http://google.com' type = "button" th:href="@{/register}">New Shoppers</newbtn>
-            <empbtn onclick= location.href='http://google.com' type = "button" th:href="@{/login}">Employee Login</empbtn>
+            <button class="newbtn" onclick= location.href='http://google.com' type = "button" >New Shoppers</button>
+            <button class="empbtn" onclick= location.href='http://google.com' type = "button" >Employee Login</button>
         </div>
     </form>
 </body>
