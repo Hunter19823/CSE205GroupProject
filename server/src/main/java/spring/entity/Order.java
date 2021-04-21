@@ -34,7 +34,7 @@ public class Order {
         return orderNumber;
     }
 
-    public void setOrderNumber( Long BigInteger )
+    public void setOrderNumber( BigInteger orderNumber )
     {
         this.orderNumber = orderNumber;
     }

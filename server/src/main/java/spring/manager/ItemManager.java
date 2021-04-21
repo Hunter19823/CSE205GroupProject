@@ -12,6 +12,7 @@ import spring.repositories.ItemRepository;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Optional;
 
 @Service
@@ -57,12 +58,12 @@ public class ItemManager {
         return itemRepository.findAll(pageable);
     }
 
-    public Optional<Item> findByItemId( Long id )
+    public Optional<Item> findByItemId( BigInteger id )
     {
         return itemRepository.findById(id);
     }
 
-    public Optional<ItemCategories> findItemCategory( Long id )
+    public Optional<ItemCategories> findItemCategory( BigInteger id )
     {
         return itemCategoryRepository.findById(id);
     }
