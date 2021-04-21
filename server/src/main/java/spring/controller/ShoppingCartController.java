@@ -35,7 +35,7 @@ public class ShoppingCartController {
         }
         System.out.println(request.getRemoteUser());
 
-        return "shoppingCart";
+        return "cart";
     }
 
     @RequestMapping("/shoppingCartRemoveItem")
