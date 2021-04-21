@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CategoryController {
 
 
-    @GetMapping("/")
+    @GetMapping("/landing")
     public String onIndexRequest()
     {
-
-        return "index";
+        return "landing";
     }
 }
