@@ -1,15 +1,14 @@
 package spring.manager;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring.entity.Order;
-import spring.model.OrderInfo;
+import spring.model.ItemInfo;
 import spring.model.ShoppingCartInfo;
 import spring.repositories.OrderRepository;
 import spring.repositories.PendingOrderRepository;
 
 import javax.transaction.Transactional;
-import java.math.BigInteger;
-import java.util.List;
 
 @Transactional
 @Service
@@ -24,52 +23,31 @@ public class OrderManager {
         this.pendingOrderRepository = pendingOrderRepository;
     }
 
-    private BigInteger saveToOrder( OrderInfo orderInfo )
+    /*private Order upsert(Long orderId, int quantity, Long itemid)
     {
-        // TODO validate shopping cart info.
 
-        // TODO create order from valid shopping cart info.
+    }*/
+
+    private Long saveToOrder(ItemInfo itemInfo)
+    {
+        //TODO validate shopping cart info.
+        //if(!orderRepository.existsById(saveToOrder(itemInfo)))
+            //orderRepository.upsert(orderId, quantity, itemid);
+
+        //TODO create order from valid shopping cart info
+
         Order order = new Order();
-
-
         order = orderRepository.save(order);
-
         return order.getOrderNumber();
     }
 
-    public void saveToCart( ShoppingCartInfo shoppingCartInfo){
-
-
-    }
-
-    public void updateCart( ShoppingCartInfo shoppingCartInfo )
+    /*public Long saveToCart(ShoppingCartInfo shoppingCartInfo)
     {
 
     }
 
-    public boolean cartExists( String username )
+    public ShoppingCartInfo loadCart(String username)
     {
-        // TODO query if cart exists.
 
-        return false;
-    }
-
-    public ShoppingCartInfo loadCart( String username )
-    {
-        ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
-
-
-        try {
-            List<Order> orderList = orderRepository.findOrdersBy(username);
-        }catch(IllegalArgumentException e)
-        {
-
-        }
-
-        // TODO add items to cart.
-
-        return shoppingCartInfo;
-    }
-
-
+    }*/
 }
