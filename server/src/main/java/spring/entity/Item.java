@@ -1,34 +1,39 @@
 package spring.entity;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
-@Entity // https://www.objectdb.com/api/java/jpa/Entity
-@Table(name = "ITEMS", schema="store") // https://www.objectdb.com/api/java/jpa/Table
+import static spring.util.SettingUtil.ITEM_DESCRIPTION_LENGTH;
+import static spring.util.SettingUtil.ITEM_NAME_LENGTH;
+
+@Entity
+@Table(name = "items", schema = "store")
 public class Item {
-    private static final Logger LOGGER = LogManager.getLogger(Item.class);
 
-    @Id// https://www.objectdb.com/api/java/jpa/Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "UUID", nullable = false, unique = true)
-    private Long uuid;
+    @Id
+    @GeneratedValue(generator = "items_uuid_seq")
+    @Column(name = "uuid", nullable = false, unique = true)
+    private BigInteger uuid;
 
-    @Column(name = "ITEM_NAME", length = 50, nullable = false, unique = false) // https://www.objectdb.com/api/java/jpa/Column
+    @Column(name = "name", length = ITEM_NAME_LENGTH, nullable = false)
     private String name;
 
-    @Column(name = "DESCRIPTION", length = 512, nullable = false, unique = false)
-    @Lob // https://www.objectdb.com/api/java/jpa/Lob
+    @Column(name = "description", length = ITEM_DESCRIPTION_LENGTH, nullable = false)
     private String description;
 
-    @Column(name = "QUANTITY", nullable = false)
-    private int quantity;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
-    @Column(name = "PRICE", nullable = false, precision = 12, scale = 2)
+    @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
+
+    @OneToOne(mappedBy = "itemId")
+    private Order order;
+
+    @OneToOne(mappedBy = "order")
+    private PendingOrder pendingOrder;
 
     public Item() {
         this.name = null;
@@ -45,34 +50,19 @@ public class Item {
         this.price = price;
     }
 
-    public Long getUuid()
+    public BigInteger getUuid()
     {
-        return this.uuid;
+        return uuid;
+    }
+
+    public void setUuid( BigInteger uuid )
+    {
+        this.uuid = uuid;
     }
 
     public String getName()
     {
-        return this.name;
-    }
-
-    public String getDescription()
-    {
-        return this.description;
-    }
-
-    public int getQuantity()
-    {
-        return this.quantity;
-    }
-
-    public BigDecimal getPrice()
-    {
-        return this.price;
-    }
-
-    public void setUuid( Long uuid )
-    {
-        this.uuid = uuid;
+        return name;
     }
 
     public void setName( String name )
@@ -80,9 +70,19 @@ public class Item {
         this.name = name;
     }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
     public void setDescription( String description )
     {
         this.description = description;
+    }
+
+    public int getQuantity()
+    {
+        return quantity;
     }
 
     public void setQuantity( int quantity )
@@ -90,8 +90,33 @@ public class Item {
         this.quantity = quantity;
     }
 
+    public BigDecimal getPrice()
+    {
+        return price;
+    }
+
     public void setPrice( BigDecimal price )
     {
         this.price = price;
+    }
+
+    public Order getOrder()
+    {
+        return order;
+    }
+
+    public void setOrder( Order order )
+    {
+        this.order = order;
+    }
+
+    public PendingOrder getPendingOrder()
+    {
+        return pendingOrder;
+    }
+
+    public void setPendingOrder( PendingOrder pendingOrder )
+    {
+        this.pendingOrder = pendingOrder;
     }
 }

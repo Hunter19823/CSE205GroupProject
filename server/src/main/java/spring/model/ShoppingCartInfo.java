@@ -7,7 +7,7 @@ import java.util.Map;
 public class ShoppingCartInfo {
     private Long orderNumber;
 
-    private final Map<Long,ItemInfo> items = new HashMap<>();
+    private final Map<Long, OrderInfo> items = new HashMap<>();
 
     public ShoppingCartInfo()
     {
@@ -23,23 +23,23 @@ public class ShoppingCartInfo {
         this.orderNumber = orderNumber;
     }
 
-    public Map<Long,ItemInfo> getItems()
+    public Map<Long, OrderInfo> getItems()
     {
         return items;
     }
 
-    public void addItem( ItemInfo item, int quantity)
+    public void addItem( OrderInfo item, int quantity)
     {
         // TODO
 
     }
 
-    public void updateItem( ItemInfo item, int quantity)
+    public void updateItem( OrderInfo item, int quantity)
     {
         // TODO
     }
 
-    public void removeItem( ItemInfo item)
+    public void removeItem( OrderInfo item)
     {
         // TODO
     }

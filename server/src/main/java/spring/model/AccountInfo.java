@@ -1,6 +1,6 @@
 package spring.model;
 
-import spring.form.AccountForm;
+import spring.form.AccountRegistrationForm;
 
 public class AccountInfo {
     private String username;
@@ -9,7 +9,7 @@ public class AccountInfo {
     private String email;
     private String address;
 
-    public AccountInfo( AccountForm form)
+    public AccountInfo( AccountRegistrationForm form)
     {
         this.username = form.getUsername();
         this.firstName = form.getFirstName();

@@ -14,15 +14,15 @@ import javax.sql.DataSource;
 public class OurServer {
     private static final Logger LOGGER = LogManager.getLogger(OurServer.class);
 
-    @Bean
-    public DataSource dataSource(){
-        DriverManagerDataSource source = new DriverManagerDataSource();
-        source.setDriverClassName("org.postgresql.Driver");
-        source.setUrl("jdbc:postgresql://localhost:5432/postgres");
-        source.setUsername("postgres");
-        source.setPassword("password");
-        return source;
-    }
+//    @Bean
+//    public DataSource dataSource(){
+//        DriverManagerDataSource source = new DriverManagerDataSource();
+//        source.setDriverClassName("org.postgresql.Driver");
+//        source.setUrl("jdbc:postgresql://localhost:5432/postgres");
+//        source.setUsername("postgres");
+//        source.setPassword("password");
+//        return source;
+//    }
 
     public static void main(String... args)
     {

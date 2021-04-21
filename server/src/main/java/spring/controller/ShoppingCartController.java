@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import spring.manager.AccountManager;
 import spring.manager.ItemManager;
 import spring.manager.OrderManager;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
@@ -27,6 +29,12 @@ public class ShoppingCartController {
     @RequestMapping
     public String shoppingCartHandler( HttpServletRequest request, Model model ){
         // TODO
+        System.out.println(request.getCookies().length);
+        for(Cookie cookie : request.getCookies()){
+            System.out.println(cookie.getName());
+        }
+        System.out.println(request.getRemoteUser());
+
         return "shoppingCart";
     }
 

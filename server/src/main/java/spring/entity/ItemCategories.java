@@ -1,29 +1,37 @@
 package spring.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.math.BigInteger;
 
 @Entity
+@Table(name = "item_categories", schema = "store")
 public class ItemCategories {
 
     @Id
-    @Column
-    private Long itemID;
+    @Column(name = "id")
+    private BigInteger id;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn( name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    public Long getItemID()
+    public BigInteger getId()
     {
-        return itemID;
+        return id;
     }
 
-    public void setItemID( Long itemID )
+    public void setId( BigInteger id )
     {
-        this.itemID = itemID;
+        this.id = id;
     }
 
     public Category getCategory()
@@ -35,4 +43,7 @@ public class ItemCategories {
     {
         this.category = category;
     }
+
+
+
 }

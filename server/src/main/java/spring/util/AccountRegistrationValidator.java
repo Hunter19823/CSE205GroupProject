@@ -4,10 +4,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import spring.form.ItemForm;
+import spring.form.AccountRegistrationForm;
 
 @Component
-public class ItemFormValidator implements Validator {
+public class AccountRegistrationValidator implements Validator {
     /**
      * Can this {@link Validator} {@link #validate(Object, Errors) validate}
      * instances of the supplied {@code clazz}?
@@ -25,7 +25,7 @@ public class ItemFormValidator implements Validator {
     @Override
     public boolean supports( Class<?> clazz )
     {
-        return clazz == ItemForm.class;
+        return clazz == AccountRegistrationForm.class;
     }
 
     /**
@@ -42,9 +42,15 @@ public class ItemFormValidator implements Validator {
     @Override
     public void validate( Object target, Errors errors )
     {
-        ItemForm form = (ItemForm) target;
+        AccountRegistrationForm form = (AccountRegistrationForm) target;
 
         // TODO
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"username", "EmptyOrWhite.username");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"email", "EmptyOrWhite.email");
+        //ValidationUtils.rejectIfEmptyOrWhitespace(errors,"address", "EmptyOrWhite.address");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "EmptyOrWhite.firstName");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "EmptyOrWhite.lastName");
+        System.out.println("Validation...");
 
     }
 }
