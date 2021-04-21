@@ -1,47 +1,66 @@
 package spring.entity;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import spring.util.Authorities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import static spring.util.SettingUtil.ACCOUNT_TYPE_LENGTH;
+import static spring.util.SettingUtil.ADDRESS_LENGTH;
+import static spring.util.SettingUtil.EMAIL_LENGTH;
+import static spring.util.SettingUtil.FIRST_NAME_LENGTH;
+import static spring.util.SettingUtil.LAST_NAME_LENGTH;
+import static spring.util.SettingUtil.PASSWORD_LENGTH;
+import static spring.util.SettingUtil.USERNAME_LENGTH;
 
 @Entity
 @Table(name = "users")
 public class Account {
 
-    private static final Logger LOGGER = LogManager.getLogger(Account.class);
-
     @Id
-    @Column(nullable = false, unique = true, length = 45, name = "username")
+    @Column(name = "username", length = USERNAME_LENGTH, nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 64, name = "password")
+    @Column(name = "password", length = PASSWORD_LENGTH, nullable = false)
     private String password;
 
-    @Column(nullable = false, name = "enabled")
-    private boolean enabled = true;
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
 
-    @Column(length = 20, name = "firstname")
+    @Column(name = "firstname", length = FIRST_NAME_LENGTH, nullable = false)
     private String firstName;
-    @Column(length = 20, name = "lastname")
+
+    @Column(name = "lastname", length = LAST_NAME_LENGTH, nullable = false)
     private String lastName;
-    @Column(length = 320, name = "email")
+
+    @Column(name = "email", length = EMAIL_LENGTH, nullable = false)
     private String email;
-    @Column(nullable = false, length = 320, name = "address")
+
+    @Column(name = "address", length = ADDRESS_LENGTH, nullable = false)
     private String address;
+
+    @Column(name = "accounttype", length = ACCOUNT_TYPE_LENGTH, nullable = false )
+    private String accountType;
+
+    @OneToOne(mappedBy = "account")
+    private Order order;
+
+    @OneToOne(mappedBy = "account")
+    private PendingOrder pendingOrder;
 
     public Account()
     {
         this.username = "";
         this.password = "";
-        this.enabled = false;
+        this.enabled = true;
         this.firstName = "";
         this.lastName = "";
         this.email = "";
         this.address = "";
+        this.accountType = Authorities.CUSTOMER.getAuthority();
     }
 
     public Account( String username, String password, boolean enabled, String firstName, String lastName, String email, String address)
@@ -53,6 +72,7 @@ public class Account {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+        this.accountType = Authorities.CUSTOMER.getAuthority();
     }
 
     public String getUsername()
@@ -123,5 +143,35 @@ public class Account {
     public void setAddress( String address )
     {
         this.address = address;
+    }
+
+    public String getAccountType()
+    {
+        return accountType;
+    }
+
+    public void setAccountType( String accountType )
+    {
+        this.accountType = accountType;
+    }
+
+    public Order getOrder()
+    {
+        return order;
+    }
+
+    public void setOrder( Order order )
+    {
+        this.order = order;
+    }
+
+    public PendingOrder getPendingOrder()
+    {
+        return pendingOrder;
+    }
+
+    public void setPendingOrder( PendingOrder pendingOrder )
+    {
+        this.pendingOrder = pendingOrder;
     }
 }

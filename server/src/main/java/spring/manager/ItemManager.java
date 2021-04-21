@@ -12,6 +12,7 @@ import spring.repositories.ItemRepository;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,7 @@ public class ItemManager {
     {
         // TODO validate input
 
+
         return itemRepository.save(new Item(name,description,quantity,price));
     }
 
@@ -44,14 +46,14 @@ public class ItemManager {
         return itemRepository.findAll(pageable);
     }
 
-    public Optional<Item> findByItemId( Long id )
+    public Optional<Item> findByItemId( BigInteger id )
     {
         // TODO validate input
 
         return itemRepository.findById(id);
     }
 
-    public Optional<ItemCategories> findItemCategory( Long id )
+    public Optional<ItemCategories> findItemCategory( BigInteger id )
     {
         // TODO validate input
 

@@ -1,22 +1,23 @@
 package spring.model;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
-public class ItemInfo {
-    private Long id;
+public class OrderInfo {
+    private BigInteger id;
 
-    private String itemID;
+    private BigInteger itemID;
     private String itemName;
 
     private BigDecimal price;
-    private Long quantity;
+    private Integer quantity;
 
-    public ItemInfo()
+    public OrderInfo()
     {
 
     }
 
-    public ItemInfo( Long id, String itemID, String itemName, BigDecimal price, Long quantity )
+    public OrderInfo( BigInteger id, BigInteger itemID, String itemName, BigDecimal price, Integer quantity )
     {
         this.id = id;
         this.itemID = itemID;
@@ -25,22 +26,22 @@ public class ItemInfo {
         this.quantity = quantity;
     }
 
-    public Long getId()
+    public BigInteger getId()
     {
         return id;
     }
 
-    public void setId( Long id )
+    public void setId( BigInteger id )
     {
         this.id = id;
     }
 
-    public String getItemID()
+    public BigInteger getItemID()
     {
         return itemID;
     }
 
-    public void setItemID( String itemID )
+    public void setItemID( BigInteger itemID )
     {
         this.itemID = itemID;
     }
@@ -65,12 +66,12 @@ public class ItemInfo {
         this.price = price;
     }
 
-    public Long getQuantity()
+    public Integer getQuantity()
     {
         return quantity;
     }
 
-    public void setQuantity( Long quantity )
+    public void setQuantity( Integer quantity )
     {
         this.quantity = quantity;
     }

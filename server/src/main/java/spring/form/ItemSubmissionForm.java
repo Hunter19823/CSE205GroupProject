@@ -1,34 +1,32 @@
 package spring.form;
 
-import spring.entity.Item;
 
 import java.math.BigDecimal;
 
-public class ItemForm {
-    private long id;
+public class ItemSubmissionForm {
+    private Long id;
     private String name;
     private String description;
     private BigDecimal price;
 
-    public ItemForm()
+    public ItemSubmissionForm()
     {
-
     }
 
-    public ItemForm( Item item)
+    public ItemSubmissionForm( Long id, String name, String description, BigDecimal price )
     {
-        this.id = item.getUuid();
-        this.name = item.getName();
-        this.description = item.getDescription();
-        this.price = item.getPrice();
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
     }
 
-    public long getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId( long id )
+    public void setId( Long id )
     {
         this.id = id;
     }

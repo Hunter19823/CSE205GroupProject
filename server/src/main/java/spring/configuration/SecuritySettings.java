@@ -51,17 +51,22 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/register","/process_register","/login").permitAll()
+                    .antMatchers("/register*","/process_register*","/login*").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin(
                         httpSecurityFormLoginConfigurer -> {
                             httpSecurityFormLoginConfigurer.loginPage("/login");
                             httpSecurityFormLoginConfigurer.permitAll();
-                            httpSecurityFormLoginConfigurer.defaultSuccessUrl("/items");
+                            httpSecurityFormLoginConfigurer.failureUrl("/login?error=true");
+                            httpSecurityFormLoginConfigurer.successForwardUrl("/test");
                         }
                 )
-                .logout().logoutSuccessUrl("/").permitAll();
+                .logout()
+                .logoutUrl("/login?logout=true")
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/login")
+                .permitAll();
     }
 
     @Override

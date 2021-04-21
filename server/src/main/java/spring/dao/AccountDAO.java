@@ -3,8 +3,12 @@ package spring.dao;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import spring.entity.Account;
+import spring.util.Authorities;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class AccountDAO implements UserDetails {
     private Account account;
@@ -48,7 +52,7 @@ public class AccountDAO implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
-        return null;
+        return Collections.singleton(Authorities.valueOf(account.getAccountType().toUpperCase()));
     }
 
     @Override

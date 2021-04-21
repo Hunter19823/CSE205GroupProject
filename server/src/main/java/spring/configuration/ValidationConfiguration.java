@@ -3,22 +3,22 @@ package spring.configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import spring.form.AccountForm;
+import spring.form.AccountRegistrationForm;
 import spring.form.LoginForm;
-import spring.util.AccountFormValidator;
-import spring.util.ItemFormValidator;
+import spring.util.AccountRegistrationValidator;
+import spring.util.ItemSubmissionValidator;
 import spring.util.LoginFormValidator;
 
 @Controller
 public class ValidationConfiguration {
-    private final AccountFormValidator accountFormValidator;
-    private final ItemFormValidator itemFormValidator;
+    private final AccountRegistrationValidator accountRegistrationValidator;
+    private final ItemSubmissionValidator itemSubmissionValidator;
     private final LoginFormValidator loginFormValidator;
 
-    public ValidationConfiguration( AccountFormValidator accountFormValidator, ItemFormValidator itemFormValidator, LoginFormValidator loginFormValidator)
+    public ValidationConfiguration( AccountRegistrationValidator accountRegistrationValidator, ItemSubmissionValidator itemSubmissionValidator, LoginFormValidator loginFormValidator)
     {
-        this.accountFormValidator = accountFormValidator;
-        this.itemFormValidator = itemFormValidator;
+        this.accountRegistrationValidator = accountRegistrationValidator;
+        this.itemSubmissionValidator = itemSubmissionValidator;
         this.loginFormValidator = loginFormValidator;
     }
 
@@ -27,11 +27,11 @@ public class ValidationConfiguration {
     {
         Object data = dataBinder.getTarget();
         if(data != null){
-            if(data.getClass() == AccountForm.class){
-                dataBinder.setValidator(accountFormValidator);
+            if(data.getClass() == AccountRegistrationForm.class){
+                dataBinder.setValidator(accountRegistrationValidator);
             }
-            if(data.getClass() == ItemFormValidator.class) {
-                dataBinder.setValidator(itemFormValidator);
+            if(data.getClass() == ItemSubmissionValidator.class) {
+                dataBinder.setValidator(itemSubmissionValidator);
             }
             if(data.getClass() == LoginForm.class){
                 dataBinder.setValidator(loginFormValidator);

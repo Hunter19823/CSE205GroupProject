@@ -1,14 +1,12 @@
 package spring.form;
 
-public class AccountForm {
+public class AccountRegistrationForm {
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private String email;
     private String address;
-
-    private boolean valid;
 
     public String getAddress()
     {
@@ -68,15 +66,5 @@ public class AccountForm {
     public void setEmail( String email )
     {
         this.email = email;
-    }
-
-    public boolean isValid()
-    {
-        return valid;
-    }
-
-    public void setValid( boolean valid )
-    {
-        this.valid = valid;
     }
 }

@@ -124,8 +124,8 @@
             --Placement issues when resizing window--NOT A CONCERN--
             --hrefs not implemented-->
         <div class = "container" style = "padding:25px; background-color:#f1f1f1">
-            <newbtn onclick= location.href='http://google.com' type = "button" >New Shoppers</newbtn>
-            <empbtn onclick= location.href='http://google.com' type = "button" >Employee Login</empbtn>
+            <newbtn onclick= location.href='http://google.com' type = "button" th:href="@{/register}">New Shoppers</newbtn>
+            <empbtn onclick= location.href='http://google.com' type = "button" th:href="@{/login}">Employee Login</empbtn>
         </div>
     </form>
 </body>

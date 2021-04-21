@@ -6,8 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import spring.form.AccountForm;
+import spring.form.AccountRegistrationForm;
 import spring.form.LoginForm;
 import spring.manager.AccountManager;
 
@@ -29,28 +30,31 @@ public class AccountController {
     }
 
 
+
+
     @GetMapping("/register")
     public String showRegisterForm( Model model )
     {
-        model.addAttribute("accountForm", new AccountForm());
+        model.addAttribute("accountRegistrationForm", new AccountRegistrationForm());
 
         return "register";
     }
 
     @PostMapping( "/process_register")
-    public String processRegister( @Validated AccountForm accountForm )
+    public String processRegister(
+            @Validated @ModelAttribute("accountRegistrationForm") AccountRegistrationForm accountRegistrationForm )
     {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(accountForm.getPassword());
+        String encodedPassword = passwordEncoder.encode(accountRegistrationForm.getPassword());
 
         System.out.println("Processing Register");
         accountManager.registerAccount(
-                accountForm.getUsername(),
+                accountRegistrationForm.getUsername(),
                 encodedPassword,
-                accountForm.getFirstName(),
-                accountForm.getLastName(),
-                accountForm.getEmail(),
-                accountForm.getAddress()
+                accountRegistrationForm.getFirstName(),
+                accountRegistrationForm.getLastName(),
+                accountRegistrationForm.getEmail(),
+                accountRegistrationForm.getAddress()
         );
 
         return "redirect:/login";

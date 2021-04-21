@@ -4,62 +4,70 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.math.BigInteger;
 
 @Entity
+@Table(name = "saved_orders", schema = "store")
 public class Order {
 
     @Id
-    @Column
+    @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue
-    private Long orderNumber;
+    private BigInteger orderNumber;
 
-    @Column
-    private String username;
+    @OneToOne
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    private Account account;
 
-    @Column
-    private Long itemId;
+    @OneToOne
+    @JoinColumn(name = "item_id", referencedColumnName = "uuid", nullable = false)
+    private Item itemId;
 
-    @Column
-    private int quantity;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
-    public Long getOrderNumber()
+    public BigInteger getOrderNumber()
     {
         return orderNumber;
     }
 
-    public void setOrderNumber( Long orderNumber )
+    public void setOrderNumber( Long BigInteger )
     {
         this.orderNumber = orderNumber;
     }
 
-    public String getUsername()
+    public Account getAccount()
     {
-        return username;
+        return account;
     }
 
-    public void setUsername( String username )
+    public void setAccount( Account account )
     {
-        this.username = username;
+        this.account = account;
     }
 
-    public Long getItemId()
+    public Item getItemId()
     {
         return itemId;
     }
 
-    public void setItemId( Long itemId )
+    public void setItemId( Item itemId )
     {
         this.itemId = itemId;
     }
 
-    public int getQuantity()
+    public Integer getQuantity()
     {
         return quantity;
     }
 
-    public void setQuantity( int quantity )
+    public void setQuantity( Integer quantity )
     {
         this.quantity = quantity;
     }
+
+
 }

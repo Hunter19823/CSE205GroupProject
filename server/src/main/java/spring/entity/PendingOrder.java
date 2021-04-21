@@ -4,19 +4,25 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "pending_orders", schema = "store")
 public class PendingOrder {
     @Id
     @GeneratedValue
-    @Column
+    @Column(name = "id", nullable = false, unique = true)
     private Long pendingOrderNumber;
 
-    @Column
-    private String username;
+    @OneToOne
+    @JoinColumn( name = "username", referencedColumnName = "username", nullable = false)
+    private Account account;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn( name = "order_id", referencedColumnName = "id", nullable = false, unique = true)
     private Order order;
 
     public Long getPendingOrderNumber()
@@ -29,16 +35,6 @@ public class PendingOrder {
         this.pendingOrderNumber = orderNumber;
     }
 
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername( String username )
-    {
-        this.username = username;
-    }
-
     public Order getOrder()
     {
         return order;
@@ -47,5 +43,15 @@ public class PendingOrder {
     public void setOrder( Order order )
     {
         this.order = order;
+    }
+
+    public Account getAccount()
+    {
+        return account;
+    }
+
+    public void setAccount( Account account )
+    {
+        this.account = account;
     }
 }
