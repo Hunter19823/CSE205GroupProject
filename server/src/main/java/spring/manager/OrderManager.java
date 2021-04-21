@@ -3,7 +3,7 @@ package spring.manager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring.entity.Order;
-import spring.model.ItemInfo;
+import spring.model.OrderInfo;
 import spring.model.ShoppingCartInfo;
 import spring.repositories.OrderRepository;
 import spring.repositories.PendingOrderRepository;
@@ -28,7 +28,7 @@ public class OrderManager {
 
     }*/
 
-    private Long saveToOrder(ItemInfo itemInfo)
+    private OrderInfo saveToOrder(OrderInfo itemInfo)
     {
         //TODO validate shopping cart info.
         //if(!orderRepository.existsById(saveToOrder(itemInfo)))
@@ -38,7 +38,7 @@ public class OrderManager {
 
         Order order = new Order();
         order = orderRepository.save(order);
-        return order.getOrderNumber();
+        return itemInfo;
     }
 
     /*public Long saveToCart(ShoppingCartInfo shoppingCartInfo)
