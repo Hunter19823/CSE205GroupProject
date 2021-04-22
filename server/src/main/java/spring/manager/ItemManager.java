@@ -1,18 +1,23 @@
 package spring.manager;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
+import spring.entity.Category;
 import spring.entity.Item;
 import spring.entity.ItemCategories;
 import spring.repositories.CategoryRepository;
 import spring.repositories.ItemCategoryRepository;
 import spring.repositories.ItemRepository;
+import spring.util.SettingUtil;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,38 +38,124 @@ public class ItemManager {
 
     public Item registerItem( String name, String description, int quantity, BigDecimal price )
     {
-        // TODO validate input
-        if(name.length() < 50)
-            itemRepository.save(new Item(name, description, quantity, price));
-        if(name == null)
-            throw new IllegalArgumentException("Item must be given a name");
-        if(name.length() > 50)
+        // Null Checks
+        if(name == null || name.equalsIgnoreCase("null"))
+            throw new IllegalArgumentException("Item name cannot be null");
+        if(description == null || description.equalsIgnoreCase("null"))
+            throw new IllegalArgumentException("Description cannot be null");
+        if(price == null)
+            throw new IllegalArgumentException("Price cannot be null");
+        // Length checks
+        if(name.length() > SettingUtil.ITEM_NAME_LENGTH)
             throw new IllegalArgumentException("Item name is too long");
-        if(description.length() < 512)
-            itemRepository.save(new Item(name, description, quantity, price));
+        if(description.length() > SettingUtil.ITEM_DESCRIPTION_LENGTH)
+            throw new IllegalArgumentException("Item description is too long");
+
+        // Negative checks
         if(quantity < 0)
             throw new IllegalArgumentException("Cannot have less than 0 copies of an item");
-        if(quantity >= 0)
-            itemRepository.save(new Item(name, description, quantity, price));
-        if(price.compareTo(price) < 0)
+        if(price.compareTo(BigDecimal.ZERO) == -1)
             throw new IllegalArgumentException("Price cannot go below 0");
-        if(price.compareTo(price) >= 0)
-            itemRepository.save(new Item(name, description, quantity, price));
+
+
+        // All checks passed, saving.
         return itemRepository.save(new Item(name,description,quantity,price));
     }
 
-    public Page<Item> findAllItems( Pageable pageable )
+    public Category registerCategory( String category_id, String name )
     {
+        // Null Checks
+        if(category_id == null || category_id.equalsIgnoreCase("null"))
+            throw new IllegalArgumentException("Category ID name cannot be null");
+        if(name == null || name.equalsIgnoreCase("null"))
+            throw new IllegalArgumentException("Category name cannot be null");
+
+        // Length Checks
+        if(name.length() > SettingUtil.CATEGORY_ID_LENGTH)
+            throw new IllegalArgumentException("Category ID is too long.");
+        if(name.length() > SettingUtil.CATEGORY_NAME_LENGTH)
+            throw new IllegalArgumentException("Category name is too long.");
+
+        // Duplicate Checks
+        if(categoryRepository.existsById(category_id))
+            throw new IllegalArgumentException("Category ID already exists.");
+
+        Category category = new Category();
+        category.setCategoryID(category_id);
+        category.setCategoryName(name);
+
+        return categoryRepository.save(category);
+    }
+
+    public ItemCategories registerItemCategory( BigInteger itemID, String category)
+    {
+        // Existence Check
+        Optional<Item> itemOptional = findItemById(itemID);
+        if(!itemOptional.isPresent())
+            throw new IllegalArgumentException("Item does not exist in database.");
+
+        // Existence Check
+        Optional<Category> categoryOptional = findCategoryById(category);
+        if(!categoryOptional.isPresent())
+            throw new IllegalArgumentException("Category does not exist in database.");
+
+        ItemCategories itemCategories = new ItemCategories();
+        itemCategories.setItem(itemOptional.get().getUuid());
+        itemCategories.setCategory(categoryOptional.get());
+
+        return itemCategoryRepository.save(itemCategories);
+    }
+
+    public Page<Item> findAllItemsByPageable( Pageable pageable )
+    {
+        // Null Check
+        if(pageable == null)
+            throw new IllegalArgumentException("Pageable cannot be null");
+
+        // Query Database
         return itemRepository.findAll(pageable);
     }
 
-    public Optional<Item> findByItemId( BigInteger id )
+    public Optional<Item> findItemById( BigInteger id )
     {
+        // Null Check
+        if(id == null)
+            throw new IllegalArgumentException("Item id cannot be null");
+
+        // Query Database
         return itemRepository.findById(id);
     }
 
-    public Optional<ItemCategories> findItemCategory( BigInteger id )
+    public Page<BigInteger> findItemIdsInCategory( String categoryId, @PageableDefault(size = 1) Pageable pageable)
     {
+        // Existence Check
+        Optional<Category> categoryOptional = findCategoryById(categoryId);
+        if(!categoryOptional.isPresent())
+            throw new IllegalArgumentException("Category ID does not exist.");
+
+        return itemCategoryRepository.findItemsByCategoryId(categoryId, pageable);
+    }
+
+    public Optional<Category> findCategoryById( String categoryID )
+    {
+        // Null Check
+        if(categoryID == null || categoryID.equalsIgnoreCase("null"))
+            throw new IllegalArgumentException("Category id cannot be null");
+        // Length Check
+        if(categoryID.length() > SettingUtil.CATEGORY_ID_LENGTH)
+            throw new IllegalArgumentException("Category id is too long.");
+
+        // Query Database
+        return categoryRepository.findById(categoryID);
+    }
+
+    public Optional<ItemCategories> findItemCategoryById( BigInteger id )
+    {
+        // Null Check
+        if(id == null)
+            throw new IllegalArgumentException("Category id cannot be null");
+
+        // Query Database
         return itemCategoryRepository.findById(id);
     }
 
