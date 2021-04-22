@@ -21,68 +21,70 @@
     <h2 class="h2">Pending Orders</h2>
     <div class="container p-2">
         <div class="row">
-            <div class="col-md-3 p-1">
-                <form class="card text-center">
-                    <div class="card-body">
-                        <!-- TODO -->
-                        <h5 class="card-title">*Get Username*</h5>
-                        <div class="card-text">*Get Total Price*</div>
-                        </br>
-                        <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
-                        <!-- TODO END -->
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 p-1">
-                <form class="card text-center">
-                    <div class="card-body">
-                        <!-- TODO -->
-                        <h5 class="card-title">*Get Username*</h5>
-                        <div class="card-text">*Get Total Price*</div>
-                        </br>
-                        <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
-                        <!-- TODO END -->
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 p-1">
-                <form class="card text-center">
-                    <div class="card-body">
-                        <!-- TODO -->
-                        <h5 class="card-title">*Get Username*</h5>
-                        <div class="card-text">*Get Total Price*</div>
-                        </br>
-                        <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
-                        <!-- TODO END-->
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 p-1">
-                <form class="card text-center">
-                    <div class="card-body">
-                        <!-- TODO -->
-                        <h5 class="card-title">*Get Username*</h5>
-                        <div class="card-text">*Get Total Price*</div>
-                        </br>
-                        <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
-                        <!-- TODO END-->
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 p-1">
-                <form class="card text-center">
-                    <div class="card-body">
-                        <!-- TODO -->
-                        <h5 class="card-title">*Get Username*</h5>
-                        <div class="card-text">*Get Total Price*</div>
-                        </br>
-                        <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
-                        <!-- TODO END-->
-                    </div>
-                </form>
+<!--            <th:block th:each="item, status : ${cartItems}">-->
+                <div class="col-md-3 p-1">
+                    <form th:action="@{/shoppingCart}" class="card text-center">
+                        <div class="card-body">
+                            <!-- TODO -->
+                            <h5 class="card-title">*Get Username*</h5>
+                            <div class="card-text">*Get Total Price*</div>
+                            </br>
+                            <button type="submit" class="btn btn-outline-danger stretched-link" th:href= "@{/shoppingCart?operation=delete}">Clear Order</button>
+                            <!-- TODO END -->
+                        </div>
+                    </form>
+                </div>
+<!--            </th:block>-->
+                <div class="col-md-3 p-1">
+                    <form th:action="@{/shoppingCart}" class="card text-center">
+                        <div class="card-body">
+                            <!-- TODO -->
+                            <h5 class="card-title">*Get Username*</h5>
+                            <div class="card-text">*Get Total Price*</div>
+                            </br>
+                            <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
+                            <!-- TODO END -->
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3 p-1">
+                    <form th:action="@{/shoppingCart}" class="card text-center">
+                        <div class="card-body">
+                            <!-- TODO -->
+                            <h5 class="card-title">*Get Username*</h5>
+                            <div class="card-text">*Get Total Price*</div>
+                            </br>
+                            <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
+                            <!-- TODO END -->
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3 p-1">
+                    <form th:action="@{/shoppingCart}" class="card text-center">
+                        <div class="card-body">
+                            <!-- TODO -->
+                            <h5 class="card-title">*Get Username*</h5>
+                            <div class="card-text">*Get Total Price*</div>
+                            </br>
+                            <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
+                            <!-- TODO END -->
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3 p-1">
+                    <form th:action="@{/shoppingCart}" class="card text-center">
+                        <div class="card-body">
+                            <!-- TODO -->
+                            <h5 class="card-title">*Get Username*</h5>
+                            <div class="card-text">*Get Total Price*</div>
+                            </br>
+                            <button type="submit" class="btn btn-outline-danger stretched-link">Clear Order</button>
+                            <!-- TODO END -->
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 </div>
 
 
