@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>BestBois - Categories</title>
@@ -9,53 +9,48 @@
 <body>
 <div class="container-flex mb-4 p-3 bg-success row align-items-center mx-0">
     <div class="col-md-9">
-        <h1 class="display-3 text-light"><a href="/landing" class="link-light">BestBois</a></h1>
+        <h1 class="display-3 text-light"><a th:href="@{/categories}" class="link-light">BestBois</a></h1>
     </div>
     <div class="col-md-3">
-        <a href="/settings" class="btn btn-outline-light p-2">Settings</a>
-        <a href="/login?logout=true" class="btn btn-outline-light p-2">Sign Out</a>
+        <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>
+        <a th:if="${authorized}" th:href="@{/login?logout=true}" class="btn btn-outline-light p-2">Sign Out</a>
+        <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
     </div>
 </div>
 <div class="container">
     <h2 class="h2">Categories</h2>
+    <nav>
+        <ul class = "pagination" th:with="total = ${categories.totalPages}">
+            <li th:if="${categories.hasPrevious()}">
+                <a
+                        th:href="@{${uri.toString()}(page=${categories.previousPageable().pageNumber},size=${categories.size})}"
+                        aria-label="Previous"
+                >
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <li
+                    th:each="category : ${#numbers.sequence(0, total - 1)}">
+                <a
+                        th:href="@{${uri.toString()}(page=${category},size=${categories.size})}"
+                        th:text="${category + 1}"
+                >1</a></li>
+            <li th:if="${categories.hasNext()}">
+                <a
+                        th:href="@{${uri.toString()}(page=${categories.nextPageable().pageNumber},size=${categories.size})}"
+                        aria-label="Next"
+                >
+                    <span aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
     <div class="container p-2">
-        <div class="row">
-            <div class="col-md-3 p-1">
+        <div class="row" >
+            <div class="col-md-3 p-1" th:with="total = ${categories.totalPages}" th:each = "category : ${categories}">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">welcome to the bread shop</div>
-                        <button type="button" class="btn btn-outline-secondary stretched-link">Browse</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 p-1">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">we sell loafs, we sell bread</div>
-                        <button type="button" class="btn btn-outline-secondary stretched-link">Browse</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 p-1">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">toasted, roasted</div>
-                        <button type="button" class="btn btn-outline-secondary stretched-link">Browse</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 p-1">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">bruh</div>
-                        <button type="button" class="btn btn-outline-secondary stretched-link">Browse</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 p-1">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">I just need a baguette</div>
+                        <div class="card-title" th:text="${category.getCategoryName()}"></div>
                         <button type="button" class="btn btn-outline-secondary stretched-link">Browse</button>
                     </div>
                 </div>

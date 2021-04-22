@@ -159,6 +159,12 @@ public class ItemManager {
         return itemCategoryRepository.findById(id);
     }
 
+    public Page<Category> findAllCategories( @PageableDefault(size = 5) Pageable pageable)
+    {
+
+        return categoryRepository.findAll(pageable);
+    }
+
 
 
 }

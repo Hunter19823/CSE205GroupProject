@@ -51,7 +51,15 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/register*","/process_register*","/login*").permitAll()
+                    .antMatchers("/register*",
+                            "/process_register*",
+                            "/login",
+                            "/login?error=true",
+                            "/test",
+                            "/landing",
+                            "/categories",
+                            "/"
+                    ).permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin(
@@ -59,14 +67,18 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
                             httpSecurityFormLoginConfigurer.loginPage("/login");
                             httpSecurityFormLoginConfigurer.permitAll();
                             httpSecurityFormLoginConfigurer.failureUrl("/login?error=true");
-                            httpSecurityFormLoginConfigurer.successForwardUrl("/test");
+                            httpSecurityFormLoginConfigurer.defaultSuccessUrl("/");
                         }
                 )
-                .logout()
-                .logoutUrl("/login?logout=true")
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/login")
-                .permitAll();
+                .logout(
+                        logoutConfig ->{
+                            logoutConfig.deleteCookies("JSESSIONID");
+                            logoutConfig.logoutUrl("/login?logout=true");
+                            logoutConfig.clearAuthentication(true);
+                            logoutConfig.logoutSuccessUrl("/login");
+                            logoutConfig.invalidateHttpSession(true);
+                        }
+                );
     }
 
     @Override

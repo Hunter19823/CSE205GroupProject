@@ -44,7 +44,7 @@ public class Account {
     @Column(name = "address", length = ADDRESS_LENGTH, nullable = false)
     private String address;
 
-    @Column(name = "accounttype", length = ACCOUNT_TYPE_LENGTH, nullable = false )
+    @Column(name = "accounttype", length = ACCOUNT_TYPE_LENGTH, nullable = false)
     private String accountType;
 
     @OneToMany(mappedBy = "account")
@@ -77,6 +77,17 @@ public class Account {
         this.email = email;
         this.address = address;
         this.accountType = Authorities.CUSTOMER.getAuthority();
+    }
+    public Account( String username, String password, boolean enabled, String firstName, String lastName, String email, String address, String authority)
+    {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.accountType = authority;
     }
 
     public String getUsername()

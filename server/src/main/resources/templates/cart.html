@@ -9,11 +9,12 @@
 <body>
 <div class="container-flex mb-4 p-3 bg-success row align-items-center mx-0">
     <div class="col-md-9">
-        <h1 class="display-3 text-light"><a href="/landing" class="link-light">BestBois</a></h1>
+        <h1 class="display-3 text-light"><a th:href="@{/categories}" class="link-light">BestBois</a></h1>
     </div>
     <div class="col-md-3">
-        <a href="/settings" class="btn btn-outline-light p-2">Settings</a>
-        <a href="/login?logout=true" class="btn btn-outline-light p-2">Sign Out</a>
+        <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>
+        <a th:if="${authorized}" th:href="@{/login?logout=true}" class="btn btn-outline-light p-2">Sign Out</a>
+        <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
     </div>
 </div>
 <div class="container">

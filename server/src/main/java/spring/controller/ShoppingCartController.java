@@ -1,5 +1,6 @@
 package spring.controller;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +28,18 @@ public class ShoppingCartController {
     }
 
     @RequestMapping
-    public String shoppingCartHandler( HttpServletRequest request, Model model ){
+    public String shoppingCartHandler( HttpServletRequest request, Model model,
+                                       UsernamePasswordAuthenticationToken authenticationToken
+    )
+    {
         // TODO
-        System.out.println(request.getCookies().length);
-        for(Cookie cookie : request.getCookies()){
-            System.out.println(cookie.getName());
-        }
-        System.out.println(request.getRemoteUser());
+        model.addAttribute("authorized",AccountController.attachUserInfo(model, authenticationToken));
 
         return "cart";
     }
 
     @RequestMapping("/shoppingCartRemoveItem")
-    public String removeFromShoppingCartHandler( HttpServletRequest request, Model model ){
+    public String removeFromShoppingCartHandler( HttpServletRequest request, Model model){
         // TODO
         return "redirect:/shoppingCart";
     }
