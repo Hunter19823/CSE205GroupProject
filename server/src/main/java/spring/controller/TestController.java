@@ -1,6 +1,5 @@
 package spring.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,7 @@ public class TestController {
     @RequestMapping("/test")
     public String getTestPage( HttpServletRequest request, Model model, @PageableDefault(size = 5) Pageable pageable)
     {
-        model.addAttribute("items", itemManager.findAllItems(pageable));
+        model.addAttribute("items", itemManager.findAllItemsByPageable(pageable));
         model.addAttribute("shoppingCart", new ShoppingCartInfo());
 
         return "test";

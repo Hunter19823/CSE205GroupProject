@@ -1,9 +1,16 @@
 package spring.entity;
 
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Set;
 
 import static spring.util.SettingUtil.ITEM_DESCRIPTION_LENGTH;
 import static spring.util.SettingUtil.ITEM_NAME_LENGTH;
@@ -29,11 +36,10 @@ public class Item {
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
-    @OneToOne(mappedBy = "itemId")
-    private Order order;
 
-    @OneToOne(mappedBy = "order")
-    private PendingOrder pendingOrder;
+    @OneToMany(mappedBy = "item" )
+    private Set<Order> orders;
+
 
     public Item() {
         this.name = null;
@@ -100,23 +106,18 @@ public class Item {
         this.price = price;
     }
 
-    public Order getOrder()
+    public void setQuantity( Integer quantity )
     {
-        return order;
+        this.quantity = quantity;
     }
 
-    public void setOrder( Order order )
+    public Set<Order> getOrders()
     {
-        this.order = order;
+        return orders;
     }
 
-    public PendingOrder getPendingOrder()
+    public void setOrders( Set<Order> orders )
     {
-        return pendingOrder;
-    }
-
-    public void setPendingOrder( PendingOrder pendingOrder )
-    {
-        this.pendingOrder = pendingOrder;
+        this.orders = orders;
     }
 }

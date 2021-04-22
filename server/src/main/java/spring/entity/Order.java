@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigInteger;
+import java.util.Set;
 
 @Entity
 @Table(name = "saved_orders", schema = "store")
@@ -18,16 +20,21 @@ public class Order {
     @GeneratedValue
     private BigInteger orderNumber;
 
-    @OneToOne
+    @ManyToOne( optional = false )
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     private Account account;
 
-    @OneToOne
+    @ManyToOne( optional = false )
     @JoinColumn(name = "item_id", referencedColumnName = "uuid", nullable = false)
-    private Item itemId;
+    private Item item;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+
+    @OneToMany(mappedBy = "order" )
+    private Set<PendingOrder> pendingOrders;
+
 
     public BigInteger getOrderNumber()
     {
@@ -49,14 +56,14 @@ public class Order {
         this.account = account;
     }
 
-    public Item getItemId()
+    public Item getItem()
     {
-        return itemId;
+        return item;
     }
 
-    public void setItemId( Item itemId )
+    public void setItem( Item itemId )
     {
-        this.itemId = itemId;
+        this.item = itemId;
     }
 
     public Integer getQuantity()
@@ -69,5 +76,13 @@ public class Order {
         this.quantity = quantity;
     }
 
+    public Set<PendingOrder> getPendingOrders()
+    {
+        return pendingOrders;
+    }
 
+    public void setPendingOrders( Set<PendingOrder> pendingOrders )
+    {
+        this.pendingOrders = pendingOrders;
+    }
 }

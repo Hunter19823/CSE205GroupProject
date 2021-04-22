@@ -5,8 +5,10 @@ import spring.util.Authorities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import java.util.Set;
 
 import static spring.util.SettingUtil.ACCOUNT_TYPE_LENGTH;
 import static spring.util.SettingUtil.ADDRESS_LENGTH;
@@ -45,11 +47,13 @@ public class Account {
     @Column(name = "accounttype", length = ACCOUNT_TYPE_LENGTH, nullable = false )
     private String accountType;
 
-    @OneToOne(mappedBy = "account")
-    private Order order;
+    @OneToMany(mappedBy = "account")
+    private Set<Order> saved_orders;
 
-    @OneToOne(mappedBy = "account")
-    private PendingOrder pendingOrder;
+    @OneToMany(mappedBy = "account")
+    private Set<PendingOrder> pending_orders;
+
+
 
     public Account()
     {
@@ -155,23 +159,23 @@ public class Account {
         this.accountType = accountType;
     }
 
-    public Order getOrder()
+    public Set<Order> getSaved_orders()
     {
-        return order;
+        return saved_orders;
     }
 
-    public void setOrder( Order order )
+    public void setSaved_orders( Set<Order> saved_orders )
     {
-        this.order = order;
+        this.saved_orders = saved_orders;
     }
 
-    public PendingOrder getPendingOrder()
+    public Set<PendingOrder> getPending_orders()
     {
-        return pendingOrder;
+        return pending_orders;
     }
 
-    public void setPendingOrder( PendingOrder pendingOrder )
+    public void setPending_orders( Set<PendingOrder> pending_orders )
     {
-        this.pendingOrder = pendingOrder;
+        this.pending_orders = pending_orders;
     }
 }

@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,11 +16,11 @@ public class PendingOrder {
     @Column(name = "id", nullable = false, unique = true)
     private Long pendingOrderNumber;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn( name = "username", referencedColumnName = "username", nullable = false)
     private Account account;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn( name = "order_id", referencedColumnName = "id", nullable = false, unique = true)
     private Order order;
 
