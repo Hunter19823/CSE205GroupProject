@@ -2,31 +2,25 @@ package spring.form;
 
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class ItemSubmissionForm {
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal price;
+    private BigInteger id;
+    private String name = "Name";
+    private String description  = "Description";
+    private BigDecimal price = BigDecimal.ONE;
+    private Integer stock = 1;
 
     public ItemSubmissionForm()
     {
     }
 
-    public ItemSubmissionForm( Long id, String name, String description, BigDecimal price )
-    {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
-
-    public Long getId()
+    public BigInteger getId()
     {
         return id;
     }
 
-    public void setId( Long id )
+    public void setId( BigInteger id )
     {
         this.id = id;
     }
@@ -59,5 +53,15 @@ public class ItemSubmissionForm {
     public void setPrice( BigDecimal price )
     {
         this.price = price;
+    }
+
+    public Integer getStock()
+    {
+        return stock;
+    }
+
+    public void setStock( Integer stock )
+    {
+        this.stock = stock;
     }
 }

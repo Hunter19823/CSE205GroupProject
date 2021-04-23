@@ -17,6 +17,7 @@ import spring.util.SettingUtil;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class ItemManager {
         this.itemCategoryRepository = itemCategoryRepository;
     }
 
-    public Item registerItem( String name, String description, int quantity, BigDecimal price )
+    public Item registerItem( String name, String description, int quantity, BigDecimal price, String category_id)
     {
         // Null Checks
         if(name == null || name.equalsIgnoreCase("null"))
@@ -59,7 +60,16 @@ public class ItemManager {
 
 
         // All checks passed, saving.
-        return itemRepository.save(new Item(name,description,quantity,price));
+        Item item = itemRepository.save(new Item(name,description,quantity,price));
+
+        // Save to category.
+        Optional<Category> categoryOptional = findCategoryById(category_id);
+        if(!categoryOptional.isPresent())
+            throw new IllegalArgumentException("Invalid Category ID");
+
+        registerItemCategory(item.getUuid(),category_id);
+
+        return item;
     }
 
     public Category registerCategory( String category_id, String name )
@@ -87,7 +97,7 @@ public class ItemManager {
         return categoryRepository.save(category);
     }
 
-    public ItemCategories registerItemCategory( BigInteger itemID, String category)
+    public ItemCategories registerItemCategory( BigInteger itemID, String category_id)
     {
         // Existence Check
         Optional<Item> itemOptional = findItemById(itemID);
@@ -95,7 +105,7 @@ public class ItemManager {
             throw new IllegalArgumentException("Item does not exist in database.");
 
         // Existence Check
-        Optional<Category> categoryOptional = findCategoryById(category);
+        Optional<Category> categoryOptional = findCategoryById(category_id);
         if(!categoryOptional.isPresent())
             throw new IllegalArgumentException("Category does not exist in database.");
 
@@ -163,6 +173,11 @@ public class ItemManager {
     {
 
         return categoryRepository.findAll(pageable);
+    }
+
+    public Iterable<Item> findAllItemsInList(Page<BigInteger> integers)
+    {
+        return itemRepository.findAllById(integers);
     }
 
 

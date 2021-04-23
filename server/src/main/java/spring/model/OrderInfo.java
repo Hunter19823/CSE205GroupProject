@@ -1,5 +1,8 @@
 package spring.model;
 
+import spring.entity.Item;
+import spring.entity.Order;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -15,6 +18,23 @@ public class OrderInfo {
     public OrderInfo()
     {
 
+    }
+
+
+    public OrderInfo( Item item, Integer quantity)
+    {
+        this.itemID = item.getUuid();
+        this.itemName = item.getName();
+        this.price = item.getPrice();
+        this.quantity = quantity;
+    }
+    public OrderInfo( Order order )
+    {
+        this.id = order.getOrderNumber();
+        this.itemID = order.getItem().getUuid();
+        this.itemName = order.getItem().getName();
+        this.price = order.getItem().getPrice();
+        this.quantity = order.getQuantity();
     }
 
     public OrderInfo( BigInteger id, BigInteger itemID, String itemName, BigDecimal price, Integer quantity )

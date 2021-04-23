@@ -13,7 +13,7 @@
     </div>
     <div class="col-md-3">
         <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>
-        <a th:if="${authorized}" th:href="@{/login?logout=true}" class="btn btn-outline-light p-2">Sign Out</a>
+        <a th:if="${authorized}" th:href="@{/login(logout=true)}" class="btn btn-outline-light p-2">Sign Out</a>
         <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
     </div>
 </div>

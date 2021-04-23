@@ -20,7 +20,7 @@ import static spring.util.SettingUtil.ITEM_NAME_LENGTH;
 public class Item {
 
     @Id
-    @GeneratedValue(generator = "items_uuid_seq")
+    @GeneratedValue(generator = "store.items_uuid_seq")
     @Column(name = "uuid", nullable = false, unique = true)
     private BigInteger uuid;
 

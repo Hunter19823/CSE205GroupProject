@@ -13,7 +13,7 @@
     </div>
     <div class="col-md-3">
         <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>
-        <a th:if="${authorized}" th:href="@{/login?logout=true}" class="btn btn-outline-light p-2">Sign Out</a>
+        <a th:if="${authorized}" th:href="@{/login(logout=true)}" class="btn btn-outline-light p-2">Sign Out</a>
         <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
     </div>
 </div>
@@ -51,7 +51,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title" th:text="${category.getCategoryName()}"></div>
-                        <button type="button" class="btn btn-outline-secondary stretched-link">Browse</button>
+                        <button type="button" class="btn btn-outline-secondary stretched-link"
+                        th:href="@{/category(categoryid=${category.getCategoryID()})}">Browse</button>
                     </div>
                 </div>
             </div>
@@ -59,7 +60,22 @@
     </div>
 </div>
 
+<script>
 
+    /**
+     * Clickable Button Script for not using a tags.
+     * @author = Hunter Spragg
+     */
+    let buttonz = document.getElementsByTagName("button");
+    for(let i = 0; i< buttonz.length; i++){
+        let butt = buttonz[i];
+        if(butt.getAttribute('href')){
+            butt.onclick = function(){
+                location.href = butt.getAttribute('href');
+            }
+        }
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>

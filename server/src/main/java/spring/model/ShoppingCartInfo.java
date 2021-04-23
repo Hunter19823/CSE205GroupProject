@@ -1,64 +1,69 @@
 package spring.model;
 
+import spring.entity.Order;
+
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ShoppingCartInfo {
-    private Long orderNumber;
-
-    private final Map<Long, OrderInfo> items = new HashMap<>();
+    private final Map<BigInteger, OrderInfo> orderInfoHashMap = new HashMap<>();
 
     public ShoppingCartInfo()
     {
     }
 
-    public Long getOrderNumber()
-    {
-        return orderNumber;
+    public ShoppingCartInfo( List<Order> orderList){
+        orderList.parallelStream().forEachOrdered(order ->
+                orderInfoHashMap.put(order.getItem().getUuid(),new OrderInfo(order))
+        );
     }
 
-    public void setOrderNumber( Long orderNumber )
+    public Map<BigInteger, OrderInfo> getOrderInfoHashMap()
     {
-        this.orderNumber = orderNumber;
+        return orderInfoHashMap;
     }
 
-    public Map<Long, OrderInfo> getItems()
+    public OrderInfo getOrder(BigInteger order_id)
     {
-        return items;
+        return orderInfoHashMap.getOrDefault(order_id,new OrderInfo());
     }
 
-    public void addItem( OrderInfo item, int quantity)
+    public void putOrder( OrderInfo order)
     {
-        // TODO
-
+        orderInfoHashMap.put(order.getItemID(), order);
     }
 
-    public void updateItem( OrderInfo item, int quantity)
+    public void deleteOrder( BigInteger itemid)
     {
-        // TODO
+        if(orderInfoHashMap.containsKey(itemid)) {
+            orderInfoHashMap.remove(itemid);
+        }
     }
 
-    public void removeItem( OrderInfo item)
+    public boolean hasOrder( BigInteger item_id )
     {
-        // TODO
+        return orderInfoHashMap.containsKey(item_id);
     }
 
     public boolean isEmpty()
     {
-        return this.items.isEmpty();
+        return this.orderInfoHashMap.isEmpty();
     }
 
-    public Long getTotalItems()
+    public Integer getTotalItems()
     {
-        // TODO
-        return 0L;
+        return orderInfoHashMap.size();
     }
 
     public BigDecimal getAmountTotal()
     {
         // TODO
-        return null;
+        BigDecimal total = new BigDecimal(0);
+
+        return total;
     }
 
 }

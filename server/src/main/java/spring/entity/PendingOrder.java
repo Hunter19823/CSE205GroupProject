@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigInteger;
 
 @Entity
 @Table(name = "pending_orders", schema = "store")
@@ -14,7 +15,7 @@ public class PendingOrder {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false, unique = true)
-    private Long pendingOrderNumber;
+    private BigInteger pendingOrderNumber;
 
     @ManyToOne
     @JoinColumn( name = "username", referencedColumnName = "username", nullable = false)
@@ -24,12 +25,12 @@ public class PendingOrder {
     @JoinColumn( name = "order_id", referencedColumnName = "id", nullable = false, unique = true)
     private Order order;
 
-    public Long getPendingOrderNumber()
+    public BigInteger getPendingOrderNumber()
     {
         return pendingOrderNumber;
     }
 
-    public void setPendingOrderNumber( Long orderNumber )
+    public void setPendingOrderNumber( BigInteger orderNumber )
     {
         this.pendingOrderNumber = orderNumber;
     }

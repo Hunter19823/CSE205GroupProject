@@ -30,7 +30,7 @@
 </ol>
 
 <ol>
-    <li th:each="cart : ${shoppingCart.getItems()}" th:with="index = ${cart.key}" th:text="${cart.value.getItemName() + ' x ' + cart.value.getQuantity() + ' - $' + cart.value.getPrice()}" th:value="${cart.value.getPrice().multiply(cart.value.getQuantity())}">Order Name</li>
+    <li th:each="cart : ${shoppingCart.getOrderInfoHashMap()}" th:with="index = ${cart.key}" th:text="${cart.value.getItemName() + ' x ' + cart.value.getQuantity() + ' - $' + cart.value.getPrice()}" th:value="${cart.value.getPrice().multiply(cart.value.getQuantity())}">Order Name</li>
 </ol>
 
 </body>
