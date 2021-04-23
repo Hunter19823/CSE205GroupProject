@@ -35,6 +35,7 @@ public class AccountController {
 
     private final AccountManager accountManager;
     private final OrderManager orderManager;
+    public static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AccountController( AccountManager accountManager, OrderManager orderManager )
     {
@@ -66,8 +67,10 @@ public class AccountController {
 
     public static boolean attachUserInfo( Model model, UsernamePasswordAuthenticationToken authenticationToken, OrderManager orderManager)
     {
-        if( authenticationToken == null)
+        if( authenticationToken == null) {
+            model.addAttribute("viewType","customer");
             return false;
+        }
         Account account = ((AccountDAO)authenticationToken.getPrincipal()).getAccount();
         AccountInfo accountInfo = new AccountInfo(account);
         model.addAttribute("accountInfo",accountInfo);
@@ -102,7 +105,7 @@ public class AccountController {
     public String processRegister(
             @Validated @ModelAttribute("accountRegistrationForm") AccountRegistrationForm accountRegistrationForm )
     {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         String encodedPassword = passwordEncoder.encode(accountRegistrationForm.getPassword());
 
         LOGGER.info("Processing Register");

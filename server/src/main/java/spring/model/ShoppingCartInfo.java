@@ -1,6 +1,7 @@
 package spring.model;
 
 import spring.entity.Order;
+import spring.entity.PendingOrder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -19,6 +20,17 @@ public class ShoppingCartInfo {
         orderList.parallelStream().forEachOrdered(order ->
                 orderInfoHashMap.put(order.getItem().getUuid(),new OrderInfo(order))
         );
+    }
+
+    public ShoppingCartInfo( List<Order> orderList, List<PendingOrder> pendingOrdersList){
+        orderList.parallelStream().forEachOrdered(order ->
+                orderInfoHashMap.put(order.getItem().getUuid(),new OrderInfo(order))
+        );
+        pendingOrdersList.stream().forEachOrdered( order -> {
+            if(orderInfoHashMap.containsKey(order.getOrder().getItem().getUuid())){
+                orderInfoHashMap.get(order.getOrder().getItem().getUuid()).setPurchased(true);
+            }
+        });
     }
 
     public Map<BigInteger, OrderInfo> getOrderInfoHashMap()

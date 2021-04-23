@@ -11,7 +11,8 @@
         <h1 class="display-3 text-light"><a th:href="@{/categories}" class="link-light">BestBois</a></h1>
     </div>
     <div class="col-md-3">
-        <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>
+        <a th:if="${authorized}" th:href="@{/shoppingCart}"  class="btn btn-outline-light p-2">Check Out</a>
+        <!--        <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>-->
         <a th:if="${authorized}" th:href="@{/login(logout=true)}" class="btn btn-outline-light p-2">Sign Out</a>
         <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
     </div>

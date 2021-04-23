@@ -60,7 +60,7 @@ public class CategoryController {
             Model model,
             UsernamePasswordAuthenticationToken authenticationToken,
             @Validated ItemSubmissionForm itemSubmissionForm,
-            @RequestParam(value = "categoryid", required = true) String category,
+            @RequestParam(value = "categoryid", required = false) String category,
             @PageableDefault(size = 5) Pageable pageable
     )
     {
@@ -71,7 +71,8 @@ public class CategoryController {
 
         Item item = itemManager.registerItem(itemSubmissionForm.getName(),itemSubmissionForm.getDescription(), itemSubmissionForm.getStock(), itemSubmissionForm.getPrice(), category);
 
-
+        if(category == null || category == "")
+            return "redirect:/landing";
         return onCategoryRequest(model,pageable, null,category);
     }
 
@@ -79,7 +80,7 @@ public class CategoryController {
     public String onCategoryRequest( Model model,
                                      @PageableDefault(size = 5) Pageable pageable,
                                      UsernamePasswordAuthenticationToken authenticationToken,
-                                     @RequestParam(value = "categoryid",required = true) String categoryName
+                                     @RequestParam(value = "categoryid",required = false) String categoryName
     )
     {
         Optional<Category> categoryOptional = itemManager.findCategoryById(categoryName);

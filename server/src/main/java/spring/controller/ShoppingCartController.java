@@ -25,6 +25,7 @@ import spring.model.OrderInfo;
 import spring.model.ShoppingCartInfo;
 import spring.util.Authorities;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -71,9 +72,10 @@ public class ShoppingCartController {
     @PostMapping
     public String shoppingCartPostHandler(
             Model model,
+            HttpServletRequest request,
             UsernamePasswordAuthenticationToken authenticationToken,
             CartModificationForm cartModificationForm,
-            @RequestParam(value = "categoryid",required = true) String categoryid,
+            @RequestParam(value = "categoryid",required = false) String categoryid,
             @RequestParam(value = "itemid", required = true)    BigInteger itemId
             )
     {
@@ -117,12 +119,12 @@ public class ShoppingCartController {
             e.printStackTrace();
             LOGGER.error(e);
             try {
-                return "redirect:/category?error=true&message=" + URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Unknown Error", "UTF-8") + "&categoryid=" + categoryid;
+                return "redirect:"+request.getRequestURI()+"?error=true&message=" + URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Unknown Error", "UTF-8") + "&categoryid=" + categoryid;
             } catch (UnsupportedEncodingException ex) {
                 LOGGER.error(ex);
             }
         }
         model.addAttribute("cart",cartInfo);
-        return "redirect:/category?categoryid=" + categoryid;
+        return "redirect:"+request.getRequestURI();
     }
 }

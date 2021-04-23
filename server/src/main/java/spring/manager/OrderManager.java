@@ -140,6 +140,14 @@ public class OrderManager {
         return pendingOrderRepository.findByOrderId(id);
     }
 
+    public Optional<PendingOrder> findPendingOrderById( BigInteger id )
+    {
+        if(id == null)
+            throw new IllegalArgumentException("Pending Order Id cannot be null.");
+
+        return pendingOrderRepository.findById(id);
+    }
+
     public Optional<Order> findSavedOrderById( BigInteger id )
     {
         if(id == null)
@@ -167,11 +175,17 @@ public class OrderManager {
         return orderRepository.findOrdersBy(account.getUsername());
     }
 
+    public Optional<List<PendingOrder>> findAllPendingOrdersByAccount( Account account )
+    {
+        return pendingOrderRepository.findOrdersBy(account.getUsername());
+    }
+
     public ShoppingCartInfo loadCart( Account account )
     {
         Optional<List<Order>> orders = findAllSavedOrdersByAccount(account);
+        Optional<List<PendingOrder>> pendingOrders = findAllPendingOrdersByAccount(account);
         if(orders.isPresent()){
-            return new ShoppingCartInfo(orders.get());
+            return new ShoppingCartInfo(orders.get(),pendingOrders.get());
         }else {
             return new ShoppingCartInfo();
         }

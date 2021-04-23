@@ -57,22 +57,53 @@ CREATE TABLE IF NOT EXISTS store.item_categories
 
 CREATE TABLE IF NOT EXISTS store.saved_orders
 (
-  id            BIGSERIAL       NOT NULL UNIQUE PRIMARY KEY,
-  username      VARCHAR(50)     NOT NULL
-      REFERENCES users (username),
-  item_id       integer         NOT NULL
-      REFERENCES store.items(uuid),
-  quantity      integer         NOT NULL
-      default 1
-      CONSTRAINT positive_quantity CHECK (quantity > 0)
+    id            BIGSERIAL       NOT NULL UNIQUE PRIMARY KEY,
+    username      VARCHAR(50)     NOT NULL
+        REFERENCES users (username),
+    item_id       integer         NOT NULL
+        REFERENCES store.items(uuid),
+    quantity      integer         NOT NULL
+        default 1
+        CONSTRAINT positive_quantity CHECK (quantity > 0)
 );
 
 CREATE TABLE IF NOT EXISTS store.pending_orders
 (
-  id            BIGSERIAL       NOT NULL UNIQUE PRIMARY KEY,
-  username      VARCHAR(50)     NOT NULL
-      REFERENCES users (username),
-  order_id      BIGSERIAL       NOT NULL
-      REFERENCES store.items(uuid)
+    id            BIGSERIAL       NOT NULL UNIQUE PRIMARY KEY,
+    username      VARCHAR(50)     NOT NULL
+        REFERENCES users (username),
+    order_id      BIGSERIAL       NOT NULL UNIQUE
+        REFERENCES store.saved_orders(id)
 );
 
+INSERT INTO users(username, password, enabled, firstname, lastname, email, address, accounttype) VALUES
+(
+    'user',
+    '$2a$10$8fOW1tKFnlGF8778Msj2seaXB5QWnCpDzwYiFzKROq1FTCFkwqqBW',
+    true,
+    'customerFirstName',
+    'customerLastName',
+    'cutomer@gmail.com',
+    '1234 Customer Drive',
+    'customer'
+),
+(
+    'employee',
+    '$2a$10$8fOW1tKFnlGF8778Msj2seaXB5QWnCpDzwYiFzKROq1FTCFkwqqBW',
+    true,
+    'employeeFirstName',
+    'employeeLastName',
+    'employee@gmail.com',
+    '1234 Employee Drive',
+    'employee'
+),
+(
+    'manager',
+    '$2a$10$8fOW1tKFnlGF8778Msj2seaXB5QWnCpDzwYiFzKROq1FTCFkwqqBW',
+    true,
+    'managerFirstName',
+    'managerLastName',
+    'manager@gmail.com',
+    '1234 Manager Drive',
+    'manager'
+);

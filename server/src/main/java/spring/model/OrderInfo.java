@@ -16,6 +16,8 @@ public class OrderInfo {
     private BigDecimal price;
     private Integer quantity;
 
+    private Boolean isPurchased;
+
     public OrderInfo()
     {
 
@@ -107,5 +109,15 @@ public class OrderInfo {
     public void setItemDescription( String itemDescription )
     {
         this.itemDescription = itemDescription;
+    }
+
+    public Boolean getPurchased()
+    {
+        return isPurchased;
+    }
+
+    public void setPurchased( Boolean purchased )
+    {
+        isPurchased = purchased;
     }
 }
