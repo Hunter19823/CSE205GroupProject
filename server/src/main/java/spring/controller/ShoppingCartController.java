@@ -2,6 +2,8 @@ package spring.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +16,14 @@ import spring.entity.Account;
 import spring.entity.Item;
 import spring.entity.Order;
 import spring.form.CartModificationForm;
+import spring.form.ItemSubmissionForm;
 import spring.manager.AccountManager;
 import spring.manager.ItemManager;
 import spring.manager.OrderManager;
 import spring.model.AccountInfo;
 import spring.model.OrderInfo;
 import spring.model.ShoppingCartInfo;
+import spring.util.Authorities;
 
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
@@ -45,11 +49,21 @@ public class ShoppingCartController {
 
     @GetMapping
     public String shoppingCartHandler( Model model,
-                                       UsernamePasswordAuthenticationToken authenticationToken
+                                       UsernamePasswordAuthenticationToken authenticationToken,
+                                       @PageableDefault(size = 10) Pageable pageable
     )
     {
-        // TODO
         model.addAttribute("authorized",AccountController.attachUserInfo(model, authenticationToken, orderManager));
+        CartModificationForm cartModificationForm = new CartModificationForm();
+        cartModificationForm.setAction("purchase");
+        model.addAttribute("orderSubmissionForm", cartModificationForm);
+
+        Account account = ((AccountDAO)authenticationToken.getPrincipal()).getAccount();
+        if(account.getAccountType().equalsIgnoreCase(Authorities.MANAGER.getAuthority()) || account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority())){
+            model.addAttribute("pendingOrders",orderManager.findAllPendingOrders(pageable));
+        }else{
+            model.addAttribute("savedOrders",orderManager.findAllSavedOrdersByAccount(account));
+        }
 
         return "cart";
     }
@@ -64,28 +78,39 @@ public class ShoppingCartController {
             )
     {
         Account account = ((AccountDAO)authenticationToken.getPrincipal()).getAccount();
-        ShoppingCartInfo cartInfo = orderManager.loadCart(account);
-        OrderInfo order = cartInfo.getOrder(itemId);
-        order.setItemID(itemId);
-        order.setQuantity(cartModificationForm.getQuantity());
-//        LOGGER.info("Action: {}",cartModificationForm.getAction());
-//        LOGGER.info("Item ID: {}",cartModificationForm.getItem_id());
-//        LOGGER.info("Order ID: {}",cartModificationForm.getOrder_id());
-//        LOGGER.info("Quantity: {}",cartModificationForm.getQuantity());
+
+        ShoppingCartInfo cartInfo = new ShoppingCartInfo();
         try {
-            if(cartModificationForm == null)
-                throw new IllegalArgumentException("CartModification Form cannot be null!");
-            OrderInfo orderInfo;
-            if(cartModificationForm.getAction().equals("modify")){
-                if(cartModificationForm.getQuantity() <= 0){
-                    orderManager.deleteOrder(account, order);
-                    cartInfo.deleteOrder(cartModificationForm.getItem_id());
-                }else{
-                    orderInfo = orderManager.upsertOrder(account, order);
-                    cartInfo.putOrder(orderInfo);
+            if(account.getAccountType().equalsIgnoreCase(Authorities.MANAGER.getAuthority()) || account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority())){
+                itemManager.updateItem(itemId,cartModificationForm.getPrice(),cartModificationForm.getQuantity());
+            }else {
+                cartInfo = orderManager.loadCart(account);
+                OrderInfo order = cartInfo.getOrder(itemId);
+                order.setItemID(itemId);
+                order.setQuantity(cartModificationForm.getQuantity());
+                if (cartModificationForm == null)
+                    throw new IllegalArgumentException("CartModification Form cannot be null!");
+                OrderInfo orderInfo;
+                switch (cartModificationForm.getAction()) {
+                    case "modify":
+                        // TODO move to it's own method in order Manager.
+                        if (cartModificationForm.getQuantity() <= 0) {
+                            orderManager.deleteOrder(account, order);
+                            cartInfo.deleteOrder(cartModificationForm.getItem_id());
+                        } else {
+                            orderInfo = orderManager.upsertOrder(account, order);
+                            cartInfo.putOrder(orderInfo);
+                        }
+                        break;
+                    case "purchase":
+                        // TODO move to it's own method in order Manager.
+                        Optional<Order> orderOptional = orderManager.findSavedOrderByItemId(account,itemId);
+                        if(orderOptional.isPresent())
+                            orderManager.saveToPendingOrder(orderOptional.get());
+                        break;
+                    default:
+                        throw new Exception("Action Not Supported.");
                 }
-            }else{
-                throw new Exception("Action Not Supported.");
             }
         }catch(Exception e)
         {

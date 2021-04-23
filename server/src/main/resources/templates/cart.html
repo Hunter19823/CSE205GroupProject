@@ -22,120 +22,122 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-3 mb-4">
-                <form class="card border rounded">
+            <!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
+            <!--/*@thymesVar id="cart" type="spring.model.ShoppingCartInfo"*/-->
+            <div th:if="!${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}" class="col-md-3 mb-4"
+                 th:each="entry : ${cart.orderInfoHashMap}" th:with="orderInfo = ${entry.value}">
+                <form class="card border rounded" th:action="@{/updateorder(orderid = ${orderInfo.getId()})}" th:object="${orderSubmissionForm}" method = "post">
                     <div class="card-body">
-                        <h3 class="card-title">BestBois Bread</h3>
-                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>
-                        <div class="card-text">some description
-                            <a class="card-link" href="item url">Read More...</a></div>
-
+                        <h3 class="card-title" th:text="${orderInfo.itemName}">Name</h3>
+                        <h6 class="card-subtitle text-muted mb-2 " th:text="${orderInfo.price}">$Price</h6>
+                        <div class="card-text" th:text="${orderInfo.itemDescription}">some description
+<!--                            <a class="card-link" href="item url">Read More...</a></div>-->
+                        </div>
                         <label class="mt-3" for="item">Qty</label>
-                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">
+                        <input id="item" class="form-control" type="number" th:placeholder="${orderInfo.getQuantity()}" th:field="${orderInfo.quantity}">
                     </div>
                     <div class="card-footer">
                         <div class="d-grid gap-2">
                             <button type="button" class="col-sm btn btn-outline-primary">Update</button>
-                            <button type="button" class="col-sm btn btn-danger">Delete</button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-md-3 mb-4">
-                <form class="card border rounded">
-                    <div class="card-body">
-                        <h3 class="card-title">BestBois Bread</h3>
-                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>
-                        <div class="card-text">some description
-                            <a class="card-link" href="item url">Read More...</a></div>
+<!--            <div class="col-md-3 mb-4">-->
+<!--                <form class="card border rounded">-->
+<!--                    <div class="card-body">-->
+<!--                        <h3 class="card-title">BestBois Bread</h3>-->
+<!--                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>-->
+<!--                        <div class="card-text">some description-->
+<!--                            <a class="card-link" href="item url">Read More...</a></div>-->
 
-                        <label class="mt-3" for="item">Qty</label>
-                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>
-                            <button type="button" class="col-sm btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 mb-4">
-                <form class="card border rounded">
-                    <div class="card-body">
-                        <h3 class="card-title">BestBois Bread</h3>
-                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>
-                        <div class="card-text">some description
-                            <a class="card-link" href="item url">Read More...</a></div>
+<!--                        <label class="mt-3" for="item">Qty</label>-->
+<!--                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">-->
+<!--                    </div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <div class="d-grid gap-2">-->
+<!--                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>-->
+<!--                            <button type="button" class="col-sm btn btn-danger">Delete</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="col-md-3 mb-4">-->
+<!--                <form class="card border rounded">-->
+<!--                    <div class="card-body">-->
+<!--                        <h3 class="card-title">BestBois Bread</h3>-->
+<!--                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>-->
+<!--                        <div class="card-text">some description-->
+<!--                            <a class="card-link" href="item url">Read More...</a></div>-->
 
-                        <label class="mt-3" for="item">Qty</label>
-                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>
-                            <button type="button" class="col-sm btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 mb-4">
-                <form class="card border rounded">
-                    <div class="card-body">
-                        <h3 class="card-title">BestBois Bread</h3>
-                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>
-                        <div class="card-text">some description
-                            <a class="card-link" href="item url">Read More...</a></div>
+<!--                        <label class="mt-3" for="item">Qty</label>-->
+<!--                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">-->
+<!--                    </div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <div class="d-grid gap-2">-->
+<!--                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>-->
+<!--                            <button type="button" class="col-sm btn btn-danger">Delete</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="col-md-3 mb-4">-->
+<!--                <form class="card border rounded">-->
+<!--                    <div class="card-body">-->
+<!--                        <h3 class="card-title">BestBois Bread</h3>-->
+<!--                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>-->
+<!--                        <div class="card-text">some description-->
+<!--                            <a class="card-link" href="item url">Read More...</a></div>-->
 
-                        <label class="mt-3" for="item">Qty</label>
-                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>
-                            <button type="button" class="col-sm btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 mb-4">
-                <form class="card border rounded">
-                    <div class="card-body">
-                        <h3 class="card-title">BestBois Bread</h3>
-                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>
-                        <div class="card-text">some description
-                            <a class="card-link" href="item url">Read More...</a></div>
+<!--                        <label class="mt-3" for="item">Qty</label>-->
+<!--                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">-->
+<!--                    </div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <div class="d-grid gap-2">-->
+<!--                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>-->
+<!--                            <button type="button" class="col-sm btn btn-danger">Delete</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="col-md-3 mb-4">-->
+<!--                <form class="card border rounded">-->
+<!--                    <div class="card-body">-->
+<!--                        <h3 class="card-title">BestBois Bread</h3>-->
+<!--                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>-->
+<!--                        <div class="card-text">some description-->
+<!--                            <a class="card-link" href="item url">Read More...</a></div>-->
 
-                        <label class="mt-3" for="item">Qty</label>
-                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>
-                            <button type="button" class="col-sm btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-3 mb-4">
-                <form class="card border rounded">
-                    <div class="card-body">
-                        <h3 class="card-title">BestBois Bread</h3>
-                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>
-                        <div class="card-text">some description
-                            <a class="card-link" href="item url">Read More...</a></div>
+<!--                        <label class="mt-3" for="item">Qty</label>-->
+<!--                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">-->
+<!--                    </div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <div class="d-grid gap-2">-->
+<!--                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>-->
+<!--                            <button type="button" class="col-sm btn btn-danger">Delete</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="col-md-3 mb-4">-->
+<!--                <form class="card border rounded">-->
+<!--                    <div class="card-body">-->
+<!--                        <h3 class="card-title">BestBois Bread</h3>-->
+<!--                        <h6 class="card-subtitle text-muted mb-2 ">$4.99</h6>-->
+<!--                        <div class="card-text">some description-->
+<!--                            <a class="card-link" href="item url">Read More...</a></div>-->
 
-                        <label class="mt-3" for="item">Qty</label>
-                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>
-                            <button type="button" class="col-sm btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<!--                        <label class="mt-3" for="item">Qty</label>-->
+<!--                        <input id="item" class="form-control" type="number" placeholder="qty" value="1" min="1">-->
+<!--                    </div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <div class="d-grid gap-2">-->
+<!--                            <button type="button" class="col-sm btn btn-outline-primary">Update</button>-->
+<!--                            <button type="button" class="col-sm btn btn-danger">Delete</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
         </div>
     </div>
 </div>

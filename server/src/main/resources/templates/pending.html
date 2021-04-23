@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>BestBois - Pending Orders</title>
@@ -22,7 +22,7 @@
     <div class="container p-2">
         <div class="row">
 <!--            <th:block th:each="item, status : ${cartItems}">-->
-                <div class="col-md-3 p-1">
+                <div class="col-md-3 p-1" th:each="pendingOrder : ${pendingOrders}">
                     <form th:action="@{/shoppingCart}" class="card text-center">
                         <div class="card-body">
                             <!-- TODO -->

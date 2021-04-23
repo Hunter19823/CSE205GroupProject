@@ -116,6 +116,28 @@ public class ItemManager {
         return itemCategoryRepository.save(itemCategories);
     }
 
+    public void updateItem(BigInteger itemID, BigDecimal price, Integer quantity)
+    {
+        // Null Check
+        if(price == null)
+            throw new IllegalArgumentException("Price cannot be null");
+        if(quantity == null)
+            throw new IllegalArgumentException("Price cannot be null");
+
+        // Existence Check
+        Optional<Item> itemOptional = findItemById(itemID);
+        if(!itemOptional.isPresent())
+            throw new IllegalArgumentException("Item does not exist in database.");
+
+        // Negative checks
+        if(quantity < 0)
+            throw new IllegalArgumentException("Cannot have less than 0 copies of an item");
+        if(price.compareTo(BigDecimal.ZERO) == -1)
+            throw new IllegalArgumentException("Price cannot go below 0");
+
+        itemRepository.updateItem(itemID,price,quantity);
+    }
+
     public Page<Item> findAllItemsByPageable( Pageable pageable )
     {
         // Null Check

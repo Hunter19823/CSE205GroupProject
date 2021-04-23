@@ -1,5 +1,7 @@
 package spring.manager;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.entity.Account;
 import spring.entity.Item;
@@ -114,6 +116,11 @@ public class OrderManager {
         }
     }
 
+    public Page<PendingOrder> findAllPendingOrders( Pageable pageable )
+    {
+        return pendingOrderRepository.findAll(pageable);
+    }
+
     private Optional<Order> insert(String username, BigInteger itemId, Integer quantity )
     {
         return orderRepository.insert(username, itemId, quantity);
@@ -180,7 +187,7 @@ public class OrderManager {
      * @param order         A valid order.
      * @return              A pending order object.
      */
-    private PendingOrder saveToPendingOrder( Order order )
+    public PendingOrder saveToPendingOrder( Order order )
     {
         // TODO check if order is already pending.
         // Using pendingOrderRepository.findByOrderId

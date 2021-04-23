@@ -11,6 +11,7 @@ public class OrderInfo {
 
     private BigInteger itemID;
     private String itemName;
+    private String itemDescription;
 
     private BigDecimal price;
     private Integer quantity;
@@ -27,6 +28,7 @@ public class OrderInfo {
         this.itemName = item.getName();
         this.price = item.getPrice();
         this.quantity = quantity;
+        this.itemDescription = item.getDescription();
     }
     public OrderInfo( Order order )
     {
@@ -35,6 +37,7 @@ public class OrderInfo {
         this.itemName = order.getItem().getName();
         this.price = order.getItem().getPrice();
         this.quantity = order.getQuantity();
+        this.itemDescription = order.getItem().getDescription();
     }
 
     public OrderInfo( BigInteger id, BigInteger itemID, String itemName, BigDecimal price, Integer quantity )
@@ -94,5 +97,15 @@ public class OrderInfo {
     public void setQuantity( Integer quantity )
     {
         this.quantity = quantity;
+    }
+
+    public String getItemDescription()
+    {
+        return itemDescription;
+    }
+
+    public void setItemDescription( String itemDescription )
+    {
+        this.itemDescription = itemDescription;
     }
 }
