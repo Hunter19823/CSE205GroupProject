@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import spring.entity.Category;
 import spring.entity.Item;
+import java.math.BigInteger;
 import spring.entity.ItemCategories;
 import spring.repositories.CategoryRepository;
 import spring.repositories.ItemCategoryRepository;
@@ -134,7 +135,6 @@ public class ItemManager {
             throw new IllegalArgumentException("Cannot have less than 0 copies of an item");
         if(price.compareTo(BigDecimal.ZERO) == -1)
             throw new IllegalArgumentException("Price cannot go below 0");
-
         itemRepository.updateItem(itemID,price,quantity);
     }
 

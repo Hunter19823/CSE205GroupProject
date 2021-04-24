@@ -99,6 +99,7 @@ public class ShoppingCartController {
                         if (cartModificationForm.getQuantity() <= 0) {
                             orderManager.deleteOrder(account, order);
                             cartInfo.deleteOrder(cartModificationForm.getItem_id());
+
                         } else {
                             orderInfo = orderManager.upsertOrder(account, order);
                             cartInfo.putOrder(orderInfo);

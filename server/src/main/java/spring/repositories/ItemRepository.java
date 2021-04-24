@@ -22,4 +22,13 @@ public interface ItemRepository extends PagingAndSortingRepository<Item, BigInte
             @Param("price") BigDecimal bigDecimal,
             @Param("quantity") Integer quantity
             );
+//    @Query(
+//            value = "UPDATE store.items"+
+//                    " WHERE store.items.quantity = :quantity AND :store.items.uuid = :itemid",
+//            nativeQuery = true)
+//    void updateItem(
+//            @Param("id") BigInteger item_id,
+//            @Param("quantity") Integer quantity
+//    );
+
 }

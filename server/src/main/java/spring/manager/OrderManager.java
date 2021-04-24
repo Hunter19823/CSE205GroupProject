@@ -102,6 +102,8 @@ public class OrderManager {
             return true;
 
         Order order = orderOptional.get();
+        Optional<Item> itemOptional = itemManager.findItemById(orderInfo.getItemID());
+        Integer quantity = itemOptional.get().getQuantity();
         if(order.getAccount().getUsername().equals(account.getUsername()))
         {
             // Delete any pending orders first, as they depend on the order as well.
@@ -110,6 +112,9 @@ public class OrderManager {
                 pendingOrderRepository.deleteById(pendingOrderOptional.get().getPendingOrderNumber());
             // Delete the actual order.
             orderRepository.deleteById(order.getOrderNumber());
+            //itemOptional.get().setQuantity(orderInfo.getQuantity());
+            itemManager.updateItem(orderInfo.getItemID(), orderInfo.getPrice()
+            , quantity-orderInfo.getQuantity());
             return true;
         }else{
             throw new AccessDeniedException("Account does not own this order!");
