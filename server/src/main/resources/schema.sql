@@ -108,3 +108,7 @@ INSERT INTO users(username, password, enabled, firstname, lastname, email, addre
     '1234 Manager Drive',
     'manager'
 );
+
+
+
+
