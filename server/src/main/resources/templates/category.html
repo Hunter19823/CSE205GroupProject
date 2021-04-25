@@ -47,7 +47,8 @@
                         </div>
                         <div class="col-12">
                             <label>Quantity</label>
-                            <input class="form-control" type="number" th:field="*{quantity}" min="0" required
+                            <input class="form-control" type="number" pattern="0+\.[0-9]*[1-9][0-9]*$" step="1" min="1"
+                                   th:field="*{quantity}" required
                                    th:placeholder="${item.getQuantity()}">
                         </div>
                         <div class="col-12">

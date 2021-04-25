@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS store.items
         default 0
         CONSTRAINT non_negative_quantity CHECK (quantity >= 0),
     price       NUMERIC(12, 2)  NOT NULL
-        CONSTRAINT positive_price CHECK (price > 0)
+        CONSTRAINT positive_price CHECK (price > 0),
+    image       VARCHAR(256)
 );
 
 CREATE TABLE IF NOT EXISTS store.categories
@@ -107,3 +108,7 @@ INSERT INTO users(username, password, enabled, firstname, lastname, email, addre
     '1234 Manager Drive',
     'manager'
 );
+
+
+
+

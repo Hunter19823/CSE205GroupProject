@@ -36,6 +36,9 @@ public class Item {
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "image", length = 255, nullable = true)
+    private String imageURL;
+
 
     @OneToMany(mappedBy = "item" )
     private Set<Order> orders;
@@ -119,5 +122,13 @@ public class Item {
     public void setOrders( Set<Order> orders )
     {
         this.orders = orders;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

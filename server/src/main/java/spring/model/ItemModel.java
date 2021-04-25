@@ -12,6 +12,7 @@ public class ItemModel {
     private String description;
     private Integer quantity;
     private BigDecimal price;
+    private String imageURL;
     private CartModificationForm modificationForm;
 
     public ItemModel( Item item )
@@ -21,6 +22,7 @@ public class ItemModel {
         this.description = item.getDescription();
         this.quantity = item.getQuantity();
         this.price = item.getPrice();
+        this.imageURL = item.getImageURL();
         this.modificationForm = new CartModificationForm();
     }
 
@@ -82,5 +84,14 @@ public class ItemModel {
     public void setPrice( BigDecimal price )
     {
         this.price = price;
+    }
+
+    public String getImageURL()
+    {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }
