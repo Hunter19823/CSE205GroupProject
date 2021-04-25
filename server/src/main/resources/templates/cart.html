@@ -19,6 +19,7 @@
     </div>
 </div>
 <div class="container">
+
     <h2 class="h2 border-bottom pb-2">Cart</h2>
 
     <div class="container">
@@ -52,16 +53,16 @@
                  th:each="order : ${pendingOrders}" >
                 <div class="card-body">
                     <h3 class="card-title" th:text="${order.order.item.name}">Name</h3>
-                    <h6 class="card-subtitle text-muted mb-2 " th:text="${order.order.item.price}">$Price</h6>
+                    <h6 class="card-subtitle text-muted mb-2 " th:text="${'Total: $' + order.order.item.price * order.order.quantity}">$Price</h6></br>
                     <div class="card-text" th:text="${order.order.item.description}">some description
                         <!--                            <a class="card-link" href="item url">Read More...</a></div>-->
                     </div>
                     <label class="mt-3" for="item">Qty</label>
                     <h6 id="item" class="form-control" type="number" th:text="${order.order.quantity}" ></h6>
-                    <h6 th:text="${order.account.username}">Username</h6>
-                    <h6 th:text="${order.account.firstName+' '+order.account.lastName}">Name</h6>
-                    <h6 th:text="${order.account.address}">Address</h6>
-                    <h6 th:text="${order.account.email}">Email</h6>
+                    <h6 th:text="${'Username: ' + order.account.username}">Username</h6>
+                    <h6 th:text="${'Full Name: ' + order.account.firstName+' '+order.account.lastName}">Name</h6>
+                    <h6 th:text="${'Address: ' + order.account.address}">Address</h6>
+                    <h6 th:text="${'Email: ' + order.account.email}">Email</h6>
                 </div>
                 <form class="card border rounded" th:action="@{/processOrder(pendingid = ${order.getPendingOrderNumber()})}" method = "post">
                     <div class="card-footer">
