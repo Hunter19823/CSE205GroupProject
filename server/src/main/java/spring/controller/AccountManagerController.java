@@ -48,18 +48,17 @@ public class AccountManagerController {
     ) {
         if (AccountManagerController.isNotManager(authenticationToken)) return "redirect:/landing";
 
-        int changes = 2;
+//        int changes = 0;
         for (AccountManagerForm.User user : accountManagerForm.users) {
-            System.out.println(this.accountRepository.findById(user.getUsername()).orElse(new Account()).getAccountType());
-            if (!this.accountRepository.findById(user.getUsername()).orElse(new Account()).getAccountType().equals(user.getAuthority()))
-                changes++;
+//            if (!this.accountRepository.findById(user.getUsername()).orElse(new Account()).getAccountType().equals(user.getAuthority()))
+//                changes++;
             this.accountRepository.updateAuthorityById(user.getUsername(), user.getAuthority());
         }
 
         attachPageAttributes(model, page, pageSize, sortBy);
-        attachChanges(model, changes);
+//        attachChanges(model, changes);
 
-        return AccountManagerController.MANAGE_ENDPOINT;
+        return "redirect:/" + AccountManagerController.MANAGE_ENDPOINT;
     }
 
     public void attachPageAttributes(Model model, Optional<Integer> page, Optional<Integer> pageSize, Optional<String> sortBy) {
@@ -72,7 +71,7 @@ public class AccountManagerController {
         model.addAttribute("url", AccountManagerController.MANAGE_ENDPOINT);
 
         model.addAttribute("pageSizeOptions", AccountManagerForm.PAGE_SIZE_OPTIONS);
-        model.addAttribute("hepageSortingOptions", AccountManagerForm.SORTABLE_FIELDS);
+        model.addAttribute("pageSortingOptions", AccountManagerForm.SORTABLE_FIELDS);
         model.addAttribute("selectedSortingOption", selectedSortBy);
 
         //mathmatic
