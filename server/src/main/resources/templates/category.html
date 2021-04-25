@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>BestBois - Categories</title>
+    <title th:text="${'BestBois - ' + #strings.capitalize(categoryName)}"></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 </head>
@@ -12,48 +12,48 @@
         <h1 class="display-3 text-light"><a th:href="@{/categories}" class="link-light">BestBois</a></h1>
     </div>
     <div class="col-md-3">
-        <a th:if="${authorized}" th:href="@{/shoppingCart}"  class="btn btn-outline-light p-2">Check Out</a>
+        <a th:if="${authorized}" th:href="@{/shoppingCart}" class="btn btn-outline-light p-2">Check Out</a>
         <!--        <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>-->
         <a th:if="${authorized}" th:href="@{/login(logout=true)}" class="btn btn-outline-light p-2">Sign Out</a>
-        <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
+        <a th:if="!${authorized}" th:href="@{/login}" class="btn btn-outline-light p-2">Login/Register</a>
     </div>
 </div>
-<nav>
-    <ul class = "pagination" th:with="total = ${itemPage.totalPages}">
-        <li th:if="${itemPage.hasPrevious()}">
-            <a
-                    th:href="@{${uri.toString()}(page=${itemPage.previousPageable().pageNumber},size=${itemPage.size},categoryid=${param.categoryid})}"
-                    aria-label="Previous"
-            >
-                <span aria-hidden="true">&lt;</span>
-            </a>
-        </li>
-        <li
-                th:each="category : ${#numbers.sequence(0, total - 1)}">
-            <a
-                    th:href="@{${uri.toString()}(page=${category},size=${itemPage.size},categoryid=${param.categoryid})}"
-                    th:text="${category + 1}"
-            >1</a></li>
-        <li th:if="${itemPage.hasNext()}">
-            <a
-                    th:href="@{${uri.toString()}(page=${itemPage.nextPageable().pageNumber},size=${itemPage.size},categoryid=${param.categoryid})}"
-                    aria-label="Next"
-            >
-                <span aria-hidden="true">&gt;</span>
-            </a>
-        </li>
-    </ul>
-    <div th:with="total = ${itemPage.totalPages}"  th:each="id : ${itemPage}">
+
+<div class="container">
+    <h2 th:text="${#strings.capitalize(categoryName)}" class="h2"></h2>
+
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newItemModal">Add New Item
+        </button>
+    </div>
+
+    <div th:with="total = ${itemPage.totalPages}" th:each="id : ${itemPage}">
         <!--/*@thymesVar id="item" type="spring.model.ItemModel"*/-->
         <div th:with="item = ${itemMap.get(id)}">
-            <form th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}" th:object="${cartModificationForm}" method = "post">
-                <div th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
-                    <h3 th:text="${item.getName()}">Item Name</h3>
-                    <label>Price</label>
-                    <input type="number" pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0" th:field="*{price}" required th:placeholder="${item.getPrice()}">
-                    <label>Quantity</label>
-                    <input type="number" th:field="*{quantity}" min="0" required th:placeholder="${item.getQuantity()}">
-                    <button type="submit">Modify Item</button>
+            <form th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}"
+                  th:object="${cartModificationForm}" method="post">
+
+                <div class="p-2"
+                     th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
+
+                    <h3 th:text="${#strings.capitalize(item.getName())}">Item Name</h3>
+                    <div class="row row-cols-md-auto align-items-end">
+                        <div class="col-12">
+                            <label th:for="${item.getName()}">Price</label>
+                            <input th:id="${item.getName()}" class="form-control" type="number"
+                                   pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0"
+                                   th:field="*{price}" required
+                                   th:placeholder="${item.getPrice()}">
+                        </div>
+                        <div class="col-12">
+                            <label>Quantity</label>
+                            <input class="form-control" type="number" th:field="*{quantity}" min="0" required
+                                   th:placeholder="${item.getQuantity()}">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-outline-primary" type="submit">Modify Item</button>
+                        </div>
+                    </div>
                 </div>
                 <div th:if="!${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
                     <h3 th:text="${item.getName() + ' x ' + item.getQuantity() + ' - $' + item.getPrice()}">Item</h3>
@@ -69,8 +69,7 @@
                            th:max="${item.getQuantity()}"
                            min=1
                            th:placeholder="${cart.getOrder(item.getUuid()).quantity}"
-                           th:default="1"
-                    >
+                           th:default="1">
                     <button th:if="!${cart.hasOrder(item.getUuid())}" type="submit">Add To Cart</button>
                     <button th:if="${cart.hasOrder(item.getUuid())}" type="submit">Update Cart</button>
                 </div>
@@ -78,24 +77,75 @@
         </div>
     </div>
 
-    <!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
-    <div th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
-        <h1>Only Employees/Managers can see this message.</h1>
-        <h2>Submit New Items to this Category</h2>
-        <!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
-        <form th:action="@{/item(categoryid=${param.categoryid})}" th:object="${itemSubmissionForm}" method="post">
-            <label>Name</label>
-            <input type="text" th:field="*{name}" required th:placeholder="${itemSubmissionForm.name}">
-            <label>Description</label>
-            <input type="text" th:field="*{description}" required th:placeholder="${itemSubmissionForm.description}">
-            <label>Price</label>
-            <input type="number" pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0.01" th:field="*{price}" required th:placeholder="${itemSubmissionForm.price}">
-            <label>Quantity</label>
-            <input type="number" th:field="*{stock}" required th:placeholder="${itemSubmissionForm.stock}">
-            <button type="submit">Add Item</button>
-        </form>
+    <div class="d-flex justify-content-center">
+        <nav aria-label="navigation">
+            <ul class="pagination">
+                <li th:class="${itemPage.hasPrevious() ? 'page-item' : 'page-item disabled'}">
+                    <a title="First Page"
+                       th:href="${url + '?page=0' + '&size=' + itemPage.getSize() + '&categoryid=' + categoryName}"
+                       class="page-link">&laquo;</a>
+                </li>
+                <li th:each="page: ${#numbers.sequence(paginationStart, paginationEnd)}"
+                    th:class="${(page - 1) == itemPage.getNumber() ? 'page-item active' : 'page-item'}">
+                    <a class="page-link" th:title="${'Page ' + page}" th:text="${page}"
+                       th:href="${url + '?page=' + (page - 1) + '&size=' + itemPage.getSize() + '&categoryid=' + categoryName}"></a>
+                </li>
+                <li th:class="${itemPage.hasNext() ? 'page-item' : 'page-item disabled'}">
+                    <a title="Last Page"
+                       th:href="${url + '?page=' + (itemPage.getTotalPages() - 1) + '&size=' + itemPage.getSize() + '&categoryid=' + categoryName}"
+                       class="page-link">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
     </div>
-</nav>
+
+    <!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
+    <!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
+    <form th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}"
+          th:action="@{/item(categoryid=${param.categoryid})}" th:object="${itemSubmissionForm}"
+          method="post">
+        <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-3">
+
+                        <!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
+                        <label>Name</label>
+                        <input class="form-control mb-2" type="text" th:field="*{name}" required
+                               th:placeholder="${itemSubmissionForm.name}">
+                        <label>Description</label>
+                        <input class="form-control mb-2" type="text" th:field="*{description}" required
+                               th:placeholder="${itemSubmissionForm.description}">
+
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label>Price</label>
+                                <input class="form-control" type="number" pattern="^\d*(\.\d{0,2})?$" step="0.01"
+                                       min="0.01" th:field="*{price}" required
+                                       th:placeholder="${itemSubmissionForm.price}">
+                            </div>
+                            <div class="col">
+                                <label>Quantity</label>
+                                <input class="form-control" type="number" th:field="*{stock}" required
+                                       th:placeholder="${itemSubmissionForm.stock}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Add Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>

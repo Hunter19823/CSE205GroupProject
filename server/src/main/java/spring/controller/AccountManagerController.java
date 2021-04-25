@@ -72,11 +72,11 @@ public class AccountManagerController {
         model.addAttribute("url", AccountManagerController.MANAGE_ENDPOINT);
 
         model.addAttribute("pageSizeOptions", AccountManagerForm.PAGE_SIZE_OPTIONS);
-        model.addAttribute("pageSortingOptions", AccountManagerForm.SORTABLE_FIELDS);
+        model.addAttribute("hepageSortingOptions", AccountManagerForm.SORTABLE_FIELDS);
         model.addAttribute("selectedSortingOption", selectedSortBy);
 
         //mathmatic
-        model.addAttribute("paginationStart", Math.max(Math.min(pageNumber - 5, accountPage.getTotalPages()), 1));
+        model.addAttribute("paginationStart", Math.max(Math.min(pageNumber - 5, accountPage.getTotalPages() - 9), 1));
         model.addAttribute("paginationEnd", Math.min(Math.max(pageNumber + 4, 10), accountPage.getTotalPages()));
 
         model.addAttribute("accountPage", accountPage);
