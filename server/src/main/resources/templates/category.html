@@ -49,6 +49,7 @@
             <form th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}" th:object="${cartModificationForm}" method = "post">
                 <div th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
                     <h3 th:text="${item.getName()}">Item Name</h3>
+                    <img th:src = "@{${item.getImageURL()}}" th:width="180" th:height="160"/>
                     <label>Price</label>
                     <input type="number" pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0" th:field="*{price}" required th:placeholder="${item.getPrice()}">
                     <label>Quantity</label>
@@ -91,7 +92,7 @@
             <label>Price</label>
             <input type="number" pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0.01" th:field="*{price}" required th:placeholder="${itemSubmissionForm.price}">
             <label>Quantity</label>
-            <input type="number" th:field="*{stock}" required th:placeholder="${itemSubmissionForm.stock}">
+            <input type="number" pattern="0+\.[0-9]*[1-9][0-9]*$" step="1" min="1" th:field="*{stock}" required th:placeholder="${itemSubmissionForm.stock}">
             <button type="submit">Add Item</button>
         </form>
     </div>
