@@ -18,9 +18,9 @@
         <a th:if="!${authorized}" th:href="@{/login}"  class="btn btn-outline-light p-2">Login/Register</a>
     </div>
 </div>
+
 <div class="container">
     <h2 class="h2 border-bottom pb-2">Cart</h2>
-
     <div class="container">
         <div class="row">
             <!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
@@ -30,38 +30,46 @@
                 <form class="card border rounded" th:action="@{/shoppingCart(itemid = ${orderInfo.getItemID()})}" th:object="${orderSubmissionForm}" method = "post">
                     <div class="card-body">
                         <h3 class="card-title" th:text="${orderInfo.itemName}">Name</h3>
-                        <h6 class="card-subtitle text-muted mb-2 " th:text="${orderInfo.price}">$Price</h6>
+                        <h6 class="card-subtitle text-muted mb-2 " th:text="${'Total: $' + orderInfo.price * orderInfo.quantity}">$Price</h6>
                         <div class="card-text" th:text="${orderInfo.itemDescription}">some description
 <!--                            <a class="card-link" href="item url">Read More...</a></div>-->
                         </div>
                         <label class="mt-3" for="item">Qty</label>
                         <input id="item" class="form-control" type="number" th:placeholder="${orderInfo.getQuantity()}" th:field="*{quantity}">
                     </div>
+
                     <div class="card-footer">
                         <div class="d-grid gap-2">
                             <button type="submit`" class="col-sm btn btn-outline-primary">Update</button>
                         </div>
                     </div>
                 </form>
-                <h1 th:if="${orderInfo.purchased}">Order is being Processed!</h1>
-                <form th:if="!${orderInfo.purchased}" th:action="@{/purchase(orderid=${orderInfo.id})}" method="post">
-                    <button type="submit">Purchase</button>
-                </form>
+
+                <div class="card border rounded">
+                    <div class="card-footer text-center">
+                        <h6 th:if="${orderInfo.purchased}"><b>This order is being Processed!</b></h6>
+                        <p style="font-size: 12px"class="text-mute" th:if="${orderInfo.purchased}">Update desired quantity before in store pick up</p>
+                        <form class="d-grid gap-2" th:if="!${orderInfo.purchased}" th:action="@{/purchase(orderid=${orderInfo.id})}" method="post">
+                            <button type="submit" class="btn btn-primary">Purchase</button>
+                        </form>
+                    </div>
+                </div>
             </div>
+
             <div th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}" class="col-md-3 mb-4"
                  th:each="order : ${pendingOrders}" >
                 <div class="card-body">
                     <h3 class="card-title" th:text="${order.order.item.name}">Name</h3>
-                    <h6 class="card-subtitle text-muted mb-2 " th:text="${order.order.item.price}">$Price</h6>
+                    <h6 class="card-subtitle text-muted mb-2 " th:text="${'Total: $' + order.order.item.price * order.order.quantity}">$Price</h6>
                     <div class="card-text" th:text="${order.order.item.description}">some description
                         <!--                            <a class="card-link" href="item url">Read More...</a></div>-->
                     </div>
                     <label class="mt-3" for="item">Qty</label>
                     <h6 id="item" class="form-control" type="number" th:text="${order.order.quantity}" ></h6>
-                    <h6 th:text="${order.account.username}">Username</h6>
-                    <h6 th:text="${order.account.firstName+' '+order.account.lastName}">Name</h6>
-                    <h6 th:text="${order.account.address}">Address</h6>
-                    <h6 th:text="${order.account.email}">Email</h6>
+                    <h6 th:text="${'Username: ' + order.account.username}">Username</h6>
+                    <h6 th:text="${'Full Name: ' + order.account.firstName+' '+order.account.lastName}">Name</h6>
+                    <h6 th:text="${'Address: ' + order.account.address}">Address</h6>
+                    <h6 th:text="${'Email: ' + order.account.email}">Email</h6>
                 </div>
                 <form class="card border rounded" th:action="@{/processOrder(pendingid = ${order.getPendingOrderNumber()})}" method = "post">
                     <div class="card-footer">
