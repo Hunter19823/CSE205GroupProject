@@ -22,63 +22,70 @@
 <div class="container">
     <h2 th:text="${#strings.capitalize(categoryName)}" class="h2"></h2>
 
-    <div class="d-flex justify-content-end">
+    <div th:if="!${viewType.equals('customer')}" class="d-flex justify-content-end">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newItemModal">Add New Item
         </button>
     </div>
 
-    <div th:with="total = ${itemPage.totalPages}" th:each="id : ${itemPage}">
+    <div class="row align-items-end">
         <!--/*@thymesVar id="item" type="spring.model.ItemModel"*/-->
-        <div th:with="item = ${itemMap.get(id)}">
+        <div class="p-3 col-md-3"
+             th:with="item = ${itemMap.get(id)}, total = ${itemPage.totalPages}, inStock = ${item.getQuantity() > 0}"
+             th:each="id : ${itemPage}">
             <form th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}"
                   th:object="${cartModificationForm}" method="post">
 
-                <div class="p-2"
-                     th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
+                <div class="card" th:if="!${viewType.equalsIgnoreCase('customer')}">
+                    <div class="card-body">
+                        <h2 class="card-title" th:text="${#strings.capitalize(item.getName())}"></h2>
 
-                    <h3 th:text="${#strings.capitalize(item.getName())}">Item Name</h3>
-                    <div class="row row-cols-md-auto align-items-end">
-                        <div class="col-12">
-                            <label th:for="${item.getName()}">Price</label>
-                            <input th:id="${item.getName()}" class="form-control" type="number"
-                                   pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0"
-                                   th:field="*{price}" required
-                                   th:placeholder="${item.getPrice()}">
-                        </div>
-                        <div class="col-12">
-                            <label>Quantity</label>
-                            <input class="form-control" type="number" pattern="0+\.[0-9]*[1-9][0-9]*$" step="1" min="1"
-                                   th:field="*{quantity}" required
-                                   th:placeholder="${item.getQuantity()}">
-                        </div>
-                        <div class="col-12">
+                        <label th:for="${item.getName()}">Price</label>
+                        <input th:id="${item.getName()}" class="form-control mb-2" type="number"
+                               pattern="^\d*(\.\d{0,2})?$" step="0.01" min="0"
+                               th:field="*{price}" required
+                               th:placeholder="${item.getPrice()}">
+
+                        <label>Quantity</label>
+                        <input class="form-control mb-2" type="number" pattern="0+\.[0-9]*[1-9][0-9]*$" step="1" min="1"
+                               th:field="*{quantity}" required
+                               th:placeholder="${item.getQuantity()}">
+                        <div class="d-grid">
                             <button class="btn btn-outline-primary" type="submit">Modify Item</button>
                         </div>
                     </div>
                 </div>
-                <div th:if="!${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
-                    <h3 th:text="${item.getName() + ' x ' + item.getQuantity() + ' - $' + item.getPrice()}">Item</h3>
 
-                    <h6 th:text="${item.getDescription()}">Item Description</h6>
-                    <!--/*@thymesVar id="cart" type="spring.model.ShoppingCartInfo"*/-->
+                <div class="card" th:if="${viewType.equalsIgnoreCase('customer')}">
+                    <div class="card-body">
+                        <h2 class="card-title" th:text="${#strings.capitalize(item.getName())}"></h2>
+                        <h5 class="card-subtitle text-muted" th:text="${'$' + item.getPrice() + ' each'}"></h5>
 
-                    <input type="hidden" th:value="${item.getUuid()}" th:field="*{item_id}" required>
-                    <input th:field="*{quantity}"
-                           type="number"
-                           value="1"
-                           required
-                           th:max="${item.getQuantity()}"
-                           min=1
-                           th:placeholder="${cart.getOrder(item.getUuid()).quantity}"
-                           th:default="1">
-                    <button th:if="!${cart.hasOrder(item.getUuid())}" type="submit">Add To Cart</button>
-                    <button th:if="${cart.hasOrder(item.getUuid())}" type="submit">Update Cart</button>
+                        <p class="card-text" th:text="${item.getDescription()}"></p>
+                        <!--/*@thymesVar id="cart" type="spring.model.ShoppingCartInfo"*/-->
+
+                        <input type="hidden" th:value="${item.getUuid()}" th:field="*{item_id}" required>
+
+                        <div class="input-group">
+                            <input class="form-control" th:field="*{quantity}"
+                                   type="number"
+                                   value="1"
+                                   required
+                                   th:max="${item.getQuantity()}"
+                                   min=1
+                                   th:placeholder="${cart.getOrder(item.getUuid()).quantity}"
+                                   th:default="1">
+
+                            <button th:text="${cart.hasOrder(item.getUuid()) ? 'Update Cart' : 'Add to Cart'}"
+                                    class="btn btn-outline-primary" type="submit"></button>
+                        </div>
+                    </div>
+                    <div th:class="${'card-footer text-center ' + (inStock ? 'text-muted' : 'text-danger')}"
+                         th:text="${inStock ? item.getQuantity()  + ' in stock': 'Out of Stock'}"></div>
                 </div>
             </form>
         </div>
     </div>
 
-    </br>
     <div class="d-flex justify-content-center">
         <nav aria-label="navigation">
             <ul class="pagination">

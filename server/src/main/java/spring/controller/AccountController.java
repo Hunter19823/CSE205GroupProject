@@ -37,74 +37,70 @@ public class AccountController {
     private final OrderManager orderManager;
     public static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public AccountController( AccountManager accountManager, OrderManager orderManager )
-    {
+    public AccountController(AccountManager accountManager, OrderManager orderManager) {
         this.accountManager = accountManager;
         this.orderManager = orderManager;
     }
 
-    @GetMapping( "/login" )
-    public String onLoginRequest( Model model,
-                                  @RequestParam(name = "logout",required = false) Boolean logout,
-                                  HttpServletRequest request,
-                                  UsernamePasswordAuthenticationToken authenticationToken
-    )
-    {
+    @GetMapping("/login")
+    public String onLoginRequest(Model model,
+                                 @RequestParam(name = "logout", required = false) Boolean logout,
+                                 HttpServletRequest request,
+                                 UsernamePasswordAuthenticationToken authenticationToken
+    ) {
         model.addAttribute("login", new LoginForm());
 
-        if(logout != null && logout){
+        if (logout != null && logout) {
             HttpSession session = request.getSession(false);
-            if(session != null)
+            if (session != null)
                 session.invalidate();
-            for(Cookie cookie : request.getCookies())
+            for (Cookie cookie : request.getCookies())
                 cookie.setMaxAge(0);
-            model.addAttribute("authorized",false);
-        }else{
-            model.addAttribute("authorized",attachUserInfo(model, authenticationToken, orderManager));
+            model.addAttribute("authorized", false);
+        } else {
+            model.addAttribute("authorized", attachUserInfo(model, authenticationToken, orderManager));
         }
         return "login";
     }
 
-    public static boolean attachUserInfo( Model model, UsernamePasswordAuthenticationToken authenticationToken, OrderManager orderManager)
-    {
-        if( authenticationToken == null) {
-            model.addAttribute("viewType","customer");
+    public static boolean attachUserInfo(Model model, UsernamePasswordAuthenticationToken authenticationToken, OrderManager orderManager) {
+        if (authenticationToken == null) {
+            model.addAttribute("viewType", "customer");
             return false;
         }
-        Account account = ((AccountDAO)authenticationToken.getPrincipal()).getAccount();
+        Account account = ((AccountDAO) authenticationToken.getPrincipal()).getAccount();
         AccountInfo accountInfo = new AccountInfo(account);
-        model.addAttribute("accountInfo",accountInfo);
-        model.addAttribute("viewType",account.getAccountType());
-        if(account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority())
+
+        model.addAttribute("accountInfo", accountInfo);
+        model.addAttribute("viewType", account.getAccountType());
+
+        if (account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority())
                 || account.getAccountType().equalsIgnoreCase(Authorities.MANAGER.getAuthority())
-        ){
-            model.addAttribute("itemSubmissionForm",new ItemSubmissionForm());
+        ) {
+            model.addAttribute("itemSubmissionForm", new ItemSubmissionForm());
         }
-        if(orderManager != null)
+        if (orderManager != null)
             model.addAttribute("cart", orderManager.loadCart(account));
         return true;
     }
 
-    public static boolean attachUserInfo( Model model, UsernamePasswordAuthenticationToken authenticationToken )
-    {
-        return attachUserInfo(model,authenticationToken,null);
+    public static boolean attachUserInfo(Model model, UsernamePasswordAuthenticationToken authenticationToken) {
+        return attachUserInfo(model, authenticationToken, null);
     }
 
 
     @GetMapping("/register")
-    public String showRegisterForm( Model model,
-                                  UsernamePasswordAuthenticationToken authenticationToken )
-    {
+    public String showRegisterForm(Model model, UsernamePasswordAuthenticationToken authenticationToken) {
+
         model.addAttribute("accountRegistrationForm", new AccountRegistrationForm());
-        model.addAttribute("authorized",attachUserInfo(model, authenticationToken, orderManager));
+        model.addAttribute("authorized", attachUserInfo(model, authenticationToken, orderManager));
 
         return "register";
     }
 
-    @PostMapping( "/process_register")
+    @PostMapping("/process_register")
     public String processRegister(
-            @Validated @ModelAttribute("accountRegistrationForm") AccountRegistrationForm accountRegistrationForm )
-    {
+            @Validated @ModelAttribute("accountRegistrationForm") AccountRegistrationForm accountRegistrationForm) {
 
         String encodedPassword = passwordEncoder.encode(accountRegistrationForm.getPassword());
 
