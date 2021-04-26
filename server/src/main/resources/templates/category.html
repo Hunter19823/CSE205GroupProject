@@ -33,7 +33,7 @@
             <form th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}"
                   th:object="${cartModificationForm}" method="post">
                 <div th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}">
-                    <h3 th:text="${#strings.capitalize(item.getName())}">Item Name</h3>
+                </br><h3 th:text="${#strings.capitalize(item.getName())}">Item Name</h3>
                     <div class="row row-cols-md-auto align-items-end">
                         <div class="col-12">
                             <label th:for="${item.getName()}">Price</label>
