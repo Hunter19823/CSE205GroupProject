@@ -7,6 +7,7 @@ public class AccountRegistrationForm {
     private String lastName;
     private String email;
     private String address;
+    private String accountType;
 
     public String getAddress()
     {
@@ -67,4 +68,8 @@ public class AccountRegistrationForm {
     {
         this.email = email;
     }
+
+    public String getAccountType() { return accountType; }
+
+    public void setAccountType(String accountType) { this.accountType = accountType; }
 }

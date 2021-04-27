@@ -1,20 +1,13 @@
 package spring.controller;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import spring.dao.AccountDAO;
 import spring.entity.Account;
 import spring.form.AccountRegistrationForm;
@@ -28,6 +21,8 @@ import spring.util.Authorities;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class AccountController {
@@ -100,7 +95,9 @@ public class AccountController {
 
     @PostMapping("/process_register")
     public String processRegister(
-            @Validated @ModelAttribute("accountRegistrationForm") AccountRegistrationForm accountRegistrationForm) {
+            @Validated @ModelAttribute("accountRegistrationForm") AccountRegistrationForm accountRegistrationForm,
+            @RequestParam Optional<Boolean> managerInvoked,
+            @RequestParam Optional<Boolean> employeeInvoked) {
 
         String encodedPassword = passwordEncoder.encode(accountRegistrationForm.getPassword());
 
@@ -111,9 +108,15 @@ public class AccountController {
                 accountRegistrationForm.getFirstName(),
                 accountRegistrationForm.getLastName(),
                 accountRegistrationForm.getEmail(),
-                accountRegistrationForm.getAddress()
+                accountRegistrationForm.getAddress(),
+                accountRegistrationForm.getAccountType()
         );
 
+        if(managerInvoked.orElse(false))
+            return "redirect:/manage";
+
+        if(employeeInvoked.orElse(false))
+            return "redirect:/landing";
         return "redirect:/login";
     }
 }

@@ -1,15 +1,14 @@
 package spring.manager;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import spring.entity.Category;
 import spring.entity.Item;
 import java.math.BigInteger;
 import spring.entity.ItemCategories;
+import spring.form.CartModificationForm;
 import spring.repositories.CategoryRepository;
 import spring.repositories.ItemCategoryRepository;
 import spring.repositories.ItemRepository;
@@ -17,9 +16,6 @@ import spring.util.SettingUtil;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +32,18 @@ public class ItemManager {
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
         this.itemCategoryRepository = itemCategoryRepository;
+    }
+
+    public void performAction(BigInteger itemId, CartModificationForm form) {
+        System.out.println(form.getOperation());
+
+        if(form.getOperation().equalsIgnoreCase("modify")) {
+            this.updateItem(itemId, form.getPrice(), form.getQuantity());
+        } else if(form.getOperation().equalsIgnoreCase("delete")) {
+            System.out.println(itemId);
+            this.itemCategoryRepository.deleteById(itemId);
+//            this.itemRepository.deleteById(itemId);
+        }
     }
 
     public Item registerItem( String name, String description, int quantity, BigDecimal price, String category_id)

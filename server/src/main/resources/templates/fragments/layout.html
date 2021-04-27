@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
+<!--/*@thymesVar id="authorized" type="java.lang.Boolean"*/-->
+
+<!-- BEGIN HEADER -->
+<div th:fragment="header(authorized, viewType)" class="container-flex mb-4 p-3 bg-success row align-items-center mx-0">
+    <div class="col-md-9">
+        <h1 class="display-3 text-light"><a th:href="@{/categories}" class="link-light">BestBois</a></h1>
+    </div>
+    <div class="col-md-3">
+        <div th:if="${authorized}" class="dropdown">
+            <button class="btn btn-outline-light btn-lg dropdown-toggle" type="button" id="menu"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                Menu
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="menu">
+                <li><a th:href="@{/shoppingCart}" class="dropdown-item"
+                       th:text="${viewType.equals('customer') ? 'Check Out' : 'Pending Orders'}"></a></li>
+                <li th:if="${viewType.equals('manager')}">
+                    <a th:href="@{/manage}" class="dropdown-item">Manage Users</a>
+                </li>
+                <li th:if="${viewType.equals('employee')}">
+                    <a th:href="@{/register?employeeInvoked=true}" class="dropdown-item">Add Customer User</a>
+                </li>
+                <li><a th:href="@{/login(logout=true)}" class="dropdown-item">Sign Out</a></li>
+            </ul>
+        </div>
+        <a th:if="!${authorized}" th:href="@{/login}" class="btn btn-outline-light p-2">Login/Register</a>
+    </div>
+</div>
+<!-- END HEADER -->
+</body>
+</html>

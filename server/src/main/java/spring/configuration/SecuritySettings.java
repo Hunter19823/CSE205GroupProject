@@ -58,6 +58,7 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
                             "/test",
                             "/landing",
                             "/categories",
+                            "/favicon.ico",
                             "/"
                     ).permitAll()
                     .anyRequest().authenticated()

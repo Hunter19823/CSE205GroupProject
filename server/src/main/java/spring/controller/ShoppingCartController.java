@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import spring.dao.AccountDAO;
 import spring.entity.Account;
-import spring.entity.Item;
 import spring.entity.Order;
 import spring.form.CartModificationForm;
-import spring.form.ItemSubmissionForm;
 import spring.manager.AccountManager;
 import spring.manager.ItemManager;
 import spring.manager.OrderManager;
-import spring.model.AccountInfo;
 import spring.model.OrderInfo;
 import spring.model.ShoppingCartInfo;
 import spring.util.Authorities;
@@ -41,30 +38,27 @@ public class ShoppingCartController {
     private final AccountManager accountManager;
     private final OrderManager orderManager;
 
-    public ShoppingCartController( ItemManager itemManager, AccountManager accountManager, OrderManager orderManager )
-    {
+    public ShoppingCartController(ItemManager itemManager, AccountManager accountManager, OrderManager orderManager) {
         this.itemManager = itemManager;
         this.accountManager = accountManager;
         this.orderManager = orderManager;
     }
 
     @GetMapping
-    public String shoppingCartHandler( Model model,
-                                       UsernamePasswordAuthenticationToken authenticationToken,
-                                       @PageableDefault(size = 10) Pageable pageable
-    )
-    {
-        model.addAttribute("authorized",AccountController.attachUserInfo(model, authenticationToken, orderManager));
+    public String shoppingCartHandler(Model model, UsernamePasswordAuthenticationToken authenticationToken,
+                                      @PageableDefault(size = 10) Pageable pageable
+    ) {
         CartModificationForm cartModificationForm = new CartModificationForm();
-        cartModificationForm.setAction("purchase");
+        cartModificationForm.setOperation("purchase");
         model.addAttribute("orderSubmissionForm", cartModificationForm);
 
-        Account account = ((AccountDAO)authenticationToken.getPrincipal()).getAccount();
-        if(account.getAccountType().equalsIgnoreCase(Authorities.MANAGER.getAuthority()) || account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority())){
-            model.addAttribute("pendingOrders",orderManager.findAllPendingOrders(pageable));
-        }else{
-            model.addAttribute("savedOrders",orderManager.findAllSavedOrdersByAccount(account));
-        }
+        model.addAttribute("authorized", AccountController.attachUserInfo(model, authenticationToken, orderManager));
+
+        Account account = ((AccountDAO) authenticationToken.getPrincipal()).getAccount();
+        if (ShoppingCartController.isNotCustomer(account))
+            model.addAttribute("pendingOrders", orderManager.findAllPendingOrders(pageable));
+        else
+            model.addAttribute("savedOrders", orderManager.findAllSavedOrdersByAccount(account));
 
         return "cart";
     }
@@ -75,25 +69,27 @@ public class ShoppingCartController {
             HttpServletRequest request,
             UsernamePasswordAuthenticationToken authenticationToken,
             CartModificationForm cartModificationForm,
-            @RequestParam(value = "categoryid",required = false) String categoryid,
-            @RequestParam(value = "itemid", required = true)    BigInteger itemId
-            )
-    {
-        Account account = ((AccountDAO)authenticationToken.getPrincipal()).getAccount();
+            @RequestParam(value = "categoryid", required = false) String categoryid,
+            @RequestParam(value = "itemid", required = true) BigInteger itemId
+    ) {
 
+        Account account = ((AccountDAO) authenticationToken.getPrincipal()).getAccount();
         ShoppingCartInfo cartInfo = new ShoppingCartInfo();
+
         try {
-            if(account.getAccountType().equalsIgnoreCase(Authorities.MANAGER.getAuthority()) || account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority())){
-                itemManager.updateItem(itemId,cartModificationForm.getPrice(),cartModificationForm.getQuantity());
-            }else {
+            if (ShoppingCartController.isNotCustomer(account)) {
+                itemManager.performAction(itemId, cartModificationForm);
+            } else {
                 cartInfo = orderManager.loadCart(account);
                 OrderInfo order = cartInfo.getOrder(itemId);
                 order.setItemID(itemId);
                 order.setQuantity(cartModificationForm.getQuantity());
+
                 if (cartModificationForm == null)
                     throw new IllegalArgumentException("CartModification Form cannot be null!");
+
                 OrderInfo orderInfo;
-                switch (cartModificationForm.getAction()) {
+                switch (cartModificationForm.getOperation()) {
                     case "modify":
                         // TODO move to it's own method in order Manager.
                         if (cartModificationForm.getQuantity() <= 0) {
@@ -107,25 +103,28 @@ public class ShoppingCartController {
                         break;
                     case "purchase":
                         // TODO move to it's own method in order Manager.
-                        Optional<Order> orderOptional = orderManager.findSavedOrderByItemId(account,itemId);
-                        if(orderOptional.isPresent())
+                        Optional<Order> orderOptional = orderManager.findSavedOrderByItemId(account, itemId);
+                        if (orderOptional.isPresent())
                             orderManager.saveToPendingOrder(orderOptional.get());
                         break;
                     default:
                         throw new Exception("Action Not Supported.");
                 }
             }
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error(e);
             try {
-                return "redirect:"+request.getRequestURI()+"?error=true&message=" + URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Unknown Error", "UTF-8") + "&categoryid=" + categoryid;
+                return "redirect:" + request.getRequestURI() + "?error=true&message=" + URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Unknown Error", "UTF-8") + "&categoryid=" + categoryid;
             } catch (UnsupportedEncodingException ex) {
                 LOGGER.error(ex);
             }
         }
-        model.addAttribute("cart",cartInfo);
-        return "redirect:"+request.getRequestURI();
+        model.addAttribute("cart", cartInfo);
+        return "redirect:" + request.getRequestURI();
+    }
+
+    public static boolean isNotCustomer(Account account) {
+        return account.getAccountType().equalsIgnoreCase(Authorities.MANAGER.getAuthority()) || account.getAccountType().equalsIgnoreCase(Authorities.EMPLOYEE.getAuthority());
     }
 }

@@ -1,38 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${'BestBois - ' + #strings.capitalize(categoryName)}"></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 <body>
-<div class="container-flex mb-4 p-3 bg-success row align-items-center mx-0">
-    <div class="col-md-9">
-        <h1 class="display-3 text-light"><a th:href="@{/categories}" class="link-light">BestBois</a></h1>
-    </div>
-    <div class="col-md-3">
-        <a th:if="${authorized}" th:href="@{/shoppingCart}" class="btn btn-outline-light p-2">Check Out</a>
-        <!--        <a th:if="${authorized}" th:href="@{/settings}" class="btn btn-outline-light p-2">Settings</a>-->
-        <a th:if="${authorized}" th:href="@{/login(logout=true)}" class="btn btn-outline-light p-2">Sign Out</a>
-        <a th:if="!${authorized}" th:href="@{/login}" class="btn btn-outline-light p-2">Login/Register</a>
-    </div>
-</div>
+<!--/*@thymesVar id="cart" type="spring.model.ShoppingCartInfo"*/-->
+<!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
+<!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
+<!--/*@thymesVar id="item" type="spring.model.ItemModel"*/-->
+<!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
+
+<div th:replace="fragments/layout.html :: header(authorized=${authorized}, viewType=${viewType})"></div>
 
 <div class="container">
-    <h2 th:text="${#strings.capitalize(categoryName)}" class="h2"></h2>
+    <h2 th:text="${#strings.capitalize(categoryName)}" class="h2 p-2 border-bottom"></h2>
 
-    <div th:if="!${viewType.equals('customer')}" class="d-flex justify-content-end">
+    <div th:if="${viewType.equals('employee')}" class="d-flex justify-content-end">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newItemModal">Add New Item
         </button>
     </div>
 
     <div class="row align-items-end">
-        <!--/*@thymesVar id="item" type="spring.model.ItemModel"*/-->
+
         <div class="p-3 col-md-3"
              th:with="item = ${itemMap.get(id)}, total = ${itemPage.totalPages}, inStock = ${item.getQuantity() > 0}"
              th:each="id : ${itemPage}">
-            <form th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}"
+
+            <form th:id="${item.getUuid()}" th:action="@{/shoppingCart(categoryid=${param.categoryid}, itemid = ${item.getUuid()})}"
                   th:object="${cartModificationForm}" method="post">
 
                 <div class="card" th:if="!${viewType.equalsIgnoreCase('customer')}">
@@ -50,7 +49,12 @@
                                th:field="*{quantity}" required
                                th:placeholder="${item.getQuantity()}">
                         <div class="d-grid">
-                            <button class="btn btn-outline-primary" type="submit">Modify Item</button>
+                            <label th:for="${item.getUuid()}">Operation: </label>
+                            <select th:id="${item.getUuid()}" th:field="*{operation}" class="form-control mb-2" >
+                                <option value="modify">Modify Item</option>
+                                <option value="delete">Delete Item</option>
+                            </select>
+                            <button class="btn btn-outline-primary" type="submit">Apply Operation</button>
                         </div>
                     </div>
                 </div>
@@ -61,7 +65,6 @@
                         <h5 class="card-subtitle text-muted" th:text="${'$' + item.getPrice() + ' each'}"></h5>
 
                         <p class="card-text" th:text="${item.getDescription()}"></p>
-                        <!--/*@thymesVar id="cart" type="spring.model.ShoppingCartInfo"*/-->
 
                         <input type="hidden" th:value="${item.getUuid()}" th:field="*{item_id}" required>
 
@@ -108,9 +111,7 @@
         </nav>
     </div>
 
-    <!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
-    <!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
-    <form th:if="${viewType!=null && viewType.equalsIgnoreCase('employee') || viewType.equalsIgnoreCase('manager')}"
+    <form th:if="${viewType.equalsIgnoreCase('employee')}"
           th:action="@{/item(categoryid=${param.categoryid})}" th:object="${itemSubmissionForm}"
           method="post">
         <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -122,7 +123,6 @@
                     </div>
                     <div class="modal-body p-3">
 
-                        <!--/*@thymesVar id="itemSubmissionForm" type="spring.form.ItemSubmissionForm"*/-->
                         <label>Name</label>
                         <input class="form-control mb-2" type="text" th:field="*{name}" required
                                th:placeholder="${itemSubmissionForm.name}">

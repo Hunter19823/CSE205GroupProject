@@ -36,6 +36,7 @@ public class AccountManagerController {
         if (AccountManagerController.isNotManager(authenticationToken)) return "redirect:/landing";
 
         attachPageAttributes(model, page, pageSize, sortBy);
+        model.addAttribute("authorized", AccountController.attachUserInfo(model, authenticationToken, null));
 
         return AccountManagerController.MANAGE_ENDPOINT;
     }
@@ -48,15 +49,11 @@ public class AccountManagerController {
     ) {
         if (AccountManagerController.isNotManager(authenticationToken)) return "redirect:/landing";
 
-//        int changes = 0;
-        for (AccountManagerForm.User user : accountManagerForm.users) {
-//            if (!this.accountRepository.findById(user.getUsername()).orElse(new Account()).getAccountType().equals(user.getAuthority()))
-//                changes++;
+        for (AccountManagerForm.User user : accountManagerForm.users)
             this.accountRepository.updateAuthorityById(user.getUsername(), user.getAuthority());
-        }
 
         attachPageAttributes(model, page, pageSize, sortBy);
-//        attachChanges(model, changes);
+        model.addAttribute("authorized", AccountController.attachUserInfo(model, authenticationToken, null));
 
         return "redirect:/" + AccountManagerController.MANAGE_ENDPOINT;
     }
@@ -80,6 +77,7 @@ public class AccountManagerController {
 
         model.addAttribute("accountPage", accountPage);
         model.addAttribute("accountTypes", Authorities.values());
+
     }
 
     public void attachChanges(Model model, int changes) {

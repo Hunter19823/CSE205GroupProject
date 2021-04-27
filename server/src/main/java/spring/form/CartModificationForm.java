@@ -5,20 +5,20 @@ import java.math.BigInteger;
 
 public class CartModificationForm {
 
-    private String action = "modify";
+    private String operation = "modify";
     private BigInteger order_id;
     private BigInteger item_id;
     private Integer quantity;
     private BigDecimal price;
 
-    public String getAction()
+    public String getOperation()
     {
-        return this.action;
+        return this.operation;
     }
 
-    public void setAction( String action )
+    public void setOperation(String operation)
     {
-        this.action = action;
+        this.operation = operation;
     }
 
     public BigInteger getOrder_id()
