@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS store.categories
 CREATE TABLE IF NOT EXISTS store.item_categories
 (
     id          BIGSERIAL       NOT NULL PRIMARY KEY
-        REFERENCES store.items(uuid),
+        REFERENCES store.items(uuid) ON DELETE CASCADE ,
     category_id VARCHAR(50)     NOT NULL
         REFERENCES store.categories(id)
 );

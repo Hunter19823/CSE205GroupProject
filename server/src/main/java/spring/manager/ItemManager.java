@@ -44,8 +44,8 @@ public class ItemManager {
 
             // THIS ISNT WORKING HELP PLEASE
             System.out.println(itemId);
-            this.itemCategoryRepository.deleteById(itemId);
-//            this.itemRepository.deleteById(itemId);
+            this.itemRepository.deleteById(itemId);
+//            this.itemCategoryRepository.deleteById(itemId);
         }
     }
 
