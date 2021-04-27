@@ -2,23 +2,15 @@ package spring;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import spring.controller.AccountController;
-import spring.entity.Account;
-import spring.entity.Category;
 import spring.manager.AccountManager;
 import spring.manager.ItemManager;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Optional;
 
-@SpringBootApplication(exclude={ })
+@SpringBootApplication(exclude = {})
 public class OurServer {
     private static final Logger LOGGER = LogManager.getLogger(OurServer.class);
 
@@ -26,35 +18,17 @@ public class OurServer {
 
     private final AccountManager accountManager;
 
-    public OurServer( ItemManager itemManager, AccountManager accountManager )
-    {
+    public OurServer(ItemManager itemManager, AccountManager accountManager) {
         this.itemManager = itemManager;
         this.accountManager = accountManager;
     }
 
-
-//    @Bean
-//    public DataSource dataSource(){
-//        DriverManagerDataSource source = new DriverManagerDataSource();
-//        source.setDriverClassName("org.postgresql.Driver");
-//        source.setUrl("jdbc:postgresql://localhost:5432/postgres");
-//        source.setUsername("postgres");
-//        source.setPassword("password");
-//        return source;
-//    }
-
-    public static void main(String... args)
-    {
-        SpringApplication.run(OurServer.class,args);
-        LOGGER.info("Hello from server.");
-        LOGGER.info("Info");
-        LOGGER.warn("Warning");
-        LOGGER.error("Error!");
-        LOGGER.debug("Debug.");
+    public static void main(String... args) {
+        SpringApplication.run(OurServer.class, args);
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         try {
             itemManager.registerCategory("produce", "Fresh Produce");
             itemManager.registerCategory("meat", "Fresh Meats");
@@ -106,9 +80,8 @@ public class OurServer {
             itemManager.registerItem("Ramen", "delicious microwave ramen", 45, BigDecimal.valueOf(1.99), "pasta");
             itemManager.registerItem("fish", "delicious fish", 35, BigDecimal.valueOf(2.99), "meat");
             itemManager.registerItem("Corn", "freshly picked corn", 35, BigDecimal.valueOf(2.39), "produce");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             LOGGER.error(e);
         }
-
     }
 }

@@ -39,7 +39,10 @@ public class ItemManager {
 
         if(form.getOperation().equalsIgnoreCase("modify")) {
             this.updateItem(itemId, form.getPrice(), form.getQuantity());
+
         } else if(form.getOperation().equalsIgnoreCase("delete")) {
+
+            // THIS ISNT WORKING HELP PLEASE
             System.out.println(itemId);
             this.itemCategoryRepository.deleteById(itemId);
 //            this.itemRepository.deleteById(itemId);

@@ -1,6 +1,5 @@
 package spring.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +24,7 @@ public class OrderController {
     private final OrderManager orderManager;
     private final AccountManager accountManager;
 
-    public OrderController( ItemManager itemManager, OrderManager orderManager, AccountManager accountManager )
-    {
+    public OrderController(ItemManager itemManager, OrderManager orderManager, AccountManager accountManager) {
         this.itemManager = itemManager;
         this.orderManager = orderManager;
         this.accountManager = accountManager;
@@ -37,8 +35,7 @@ public class OrderController {
             Model model,
             HttpServletRequest request,
             UsernamePasswordAuthenticationToken authenticationToken
-    )
-    {
+    ) {
         return "redirect:/shoppingCart";
     }
 
@@ -47,8 +44,7 @@ public class OrderController {
             Model model,
             HttpServletRequest request,
             UsernamePasswordAuthenticationToken authenticationToken
-    )
-    {
+    ) {
         return "redirect:/shoppingCart";
     }
 
@@ -58,15 +54,14 @@ public class OrderController {
             HttpServletRequest request,
             UsernamePasswordAuthenticationToken authenticationToken,
             @RequestParam(value = "pendingid", required = true) BigInteger pendingid
-    ) throws AccessDeniedException
-    {
+    ) throws AccessDeniedException {
 
         Optional<PendingOrder> orderOptional = orderManager.findPendingOrderById(pendingid);
-        if(orderOptional.isPresent()) {
+        if (orderOptional.isPresent()) {
             PendingOrder pendingOrder = orderOptional.get();
-            orderManager.deleteOrder(pendingOrder.getAccount(),new OrderInfo(pendingOrder.getOrder()));
+            orderManager.deleteOrder(pendingOrder.getAccount(), new OrderInfo(pendingOrder.getOrder()));
         }
-        return "redirect:"+request.getRequestURI();
+        return "redirect:" + request.getRequestURI();
     }
 
 
@@ -76,14 +71,13 @@ public class OrderController {
             HttpServletRequest request,
             UsernamePasswordAuthenticationToken authenticationToken,
             @RequestParam(value = "orderid", required = true) BigInteger orderid
-    )
-    {
+    ) {
 
         Optional<Order> orderOptional = orderManager.findSavedOrderById(orderid);
-        if(orderOptional.isPresent())
+        if (orderOptional.isPresent())
             orderManager.saveToPendingOrder(orderOptional.get());
 
-        return "redirect:"+request.getRequestURI();
+        return "redirect:" + request.getRequestURI();
     }
 
 }

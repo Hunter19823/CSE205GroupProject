@@ -21,7 +21,6 @@ import spring.util.Authorities;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Objects;
 import java.util.Optional;
 
 @Controller

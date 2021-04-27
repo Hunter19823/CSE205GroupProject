@@ -3,7 +3,6 @@ package spring.repositories;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import spring.entity.Order;
 import spring.entity.PendingOrder;
 
 import java.math.BigInteger;
