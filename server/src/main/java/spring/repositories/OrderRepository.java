@@ -81,5 +81,17 @@ public interface OrderRepository extends PagingAndSortingRepository<Order,BigInt
             @Param("item_id") BigInteger orderId
     );
 
+    @Query(value = "SELECT * FROM store.saved_orders WHERE saved_orders.item_id = :item_id",
+    nativeQuery = true)
+    Optional<List<Order>> findAllPendingOrdersByItemID(
+            @Param("item_id") BigInteger itemId
+    );
+
+    @Query(value = "DELETE FROM store.saved_orders WHERE saved_orders.item_id = :item_id RETURNING *",
+    nativeQuery = true)
+    Optional<List<Order>> deleteAllByItemID(
+            @Param("item_id") BigInteger itemId
+    );
+
 
 }

@@ -15,4 +15,5 @@ public class SettingUtil {
 
     public static final int ITEM_NAME_LENGTH            = 50;
     public static final int ITEM_DESCRIPTION_LENGTH     = 512;
+    public static final int ITEM_IMAGE_LENGTH           = 256;
 }

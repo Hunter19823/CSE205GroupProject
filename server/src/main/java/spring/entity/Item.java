@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.util.Set;
 
 import static spring.util.SettingUtil.ITEM_DESCRIPTION_LENGTH;
+import static spring.util.SettingUtil.ITEM_IMAGE_LENGTH;
 import static spring.util.SettingUtil.ITEM_NAME_LENGTH;
 
 @Entity
@@ -36,8 +37,8 @@ public class Item {
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "image", length = 255, nullable = true)
-    private String imageURL;
+    @Column(name = "image", length = ITEM_IMAGE_LENGTH, nullable = true)
+    private String imageURL = "https://cdn.iconscout.com/icon/free/png-512/question-mark-1768084-1502257.png";
 
 
     @OneToMany(mappedBy = "item" )
@@ -57,6 +58,14 @@ public class Item {
         this.description = description;
         this.quantity = quantity;
         this.price = price;
+    }
+    public Item(String name, String description, int quantity, BigDecimal price, String imageURL)
+    {
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.imageURL = imageURL;
     }
 
     public BigInteger getUuid()

@@ -39,7 +39,7 @@ public class CategoryController {
 
     @GetMapping(value = {"/landing*", "/", "/categories", ""})
     public String onIndexRequest(Model model,
-                                 @PageableDefault(size = 5) Pageable pageable,
+                                 @PageableDefault(size = 8) Pageable pageable,
                                  UsernamePasswordAuthenticationToken authenticationToken
     ) {
         Page<Category> categoryPage = itemManager.findAllCategories(pageable);
@@ -60,7 +60,7 @@ public class CategoryController {
             UsernamePasswordAuthenticationToken authenticationToken,
             @Validated ItemSubmissionForm itemSubmissionForm,
             @RequestParam(value = "categoryid", required = false) String category,
-            @PageableDefault(size = 5) Pageable pageable
+            @PageableDefault(size = 4) Pageable pageable
     ) {
         if (authenticationToken == null)
             return onCategoryRequest(model, Pageable.unpaged(), null, category);
@@ -77,7 +77,7 @@ public class CategoryController {
 
     @GetMapping(value = "/category")
     public String onCategoryRequest(Model model,
-                                    @PageableDefault(size = 5) Pageable pageable,
+                                    @PageableDefault(size = 4) Pageable pageable,
                                     UsernamePasswordAuthenticationToken authenticationToken,
                                     @RequestParam(value = "categoryid", required = false) String categoryName
     ) {

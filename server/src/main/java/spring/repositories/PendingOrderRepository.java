@@ -19,9 +19,16 @@ public interface PendingOrderRepository extends PagingAndSortingRepository<Pendi
                     @Param("order_id") BigInteger order_id
             );
 
-
     @Query( value = "SELECT * FROM Store.pending_orders WHERE store.pending_orders.username = :user",
             nativeQuery = true
     )
     Optional<List<PendingOrder>> findOrdersBy( @Param("user") String username);
+
+    @Query( value = "DELETE FROM store.pending_orders WHERE store.pending_orders.order_id = :order_id RETURNING *",
+            nativeQuery = true
+    )
+    Optional<List<PendingOrder>> deleteByOrderId(
+            @Param("order_id") BigInteger order_id
+    );
+
 }

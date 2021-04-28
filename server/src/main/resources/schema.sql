@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS store.items
     price       NUMERIC(12, 2)  NOT NULL
         CONSTRAINT positive_price CHECK (price > 0),
     image       VARCHAR(256)
+        default 'https://cdn.iconscout.com/icon/free/png-512/question-mark-1768084-1502257.png'
 );
 
 CREATE TABLE IF NOT EXISTS store.categories
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS store.saved_orders
     id            BIGSERIAL       NOT NULL UNIQUE PRIMARY KEY,
     username      VARCHAR(50)     NOT NULL
         REFERENCES users (username),
-    item_id       integer         NOT NULL
+    item_id       BIGSERIAL       NOT NULL
         REFERENCES store.items(uuid),
     quantity      integer         NOT NULL
         default 1

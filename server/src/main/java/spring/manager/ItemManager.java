@@ -1,5 +1,7 @@
 package spring.manager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -8,48 +10,62 @@ import spring.entity.Category;
 import spring.entity.Item;
 import java.math.BigInteger;
 import spring.entity.ItemCategories;
+import spring.entity.Order;
 import spring.form.CartModificationForm;
 import spring.repositories.CategoryRepository;
 import spring.repositories.ItemCategoryRepository;
 import spring.repositories.ItemRepository;
+import spring.repositories.OrderRepository;
+import spring.repositories.PendingOrderRepository;
 import spring.util.SettingUtil;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class ItemManager {
+    private static final Logger LOGGER = LogManager.getLogger(ItemManager.class);
     private final ItemRepository itemRepository;
 
     private final CategoryRepository categoryRepository;
 
     private final ItemCategoryRepository itemCategoryRepository;
 
-    public ItemManager( ItemRepository itemRepository, CategoryRepository categoryRepository, ItemCategoryRepository itemCategoryRepository )
+    private final OrderRepository orderRepository;
+
+    private final PendingOrderRepository pendingOrderRepository;
+
+    public ItemManager( ItemRepository itemRepository, CategoryRepository categoryRepository, ItemCategoryRepository itemCategoryRepository, OrderRepository orderRepository, PendingOrderRepository pendingOrderRepository)
     {
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
         this.itemCategoryRepository = itemCategoryRepository;
+        this.orderRepository = orderRepository;
+        this.pendingOrderRepository = pendingOrderRepository;
     }
 
     public void performAction(BigInteger itemId, CartModificationForm form) {
-        System.out.println(form.getOperation());
-
+        LOGGER.info(form.getOperation());
         if(form.getOperation().equalsIgnoreCase("modify")) {
             this.updateItem(itemId, form.getPrice(), form.getQuantity());
-
         } else if(form.getOperation().equalsIgnoreCase("delete")) {
-
-            // THIS ISNT WORKING HELP PLEASE
-            System.out.println(itemId);
+            // Delete all pending + saved orders containing item.
+            this.deleteAllReferencesToItem(itemId);
+            // Delete all categories containing item.
+            this.itemCategoryRepository.deleteAllByItemID(itemId);
+            // Delete Item.
             this.itemRepository.deleteById(itemId);
-//            this.itemCategoryRepository.deleteById(itemId);
         }
     }
-
     public Item registerItem( String name, String description, int quantity, BigDecimal price, String category_id)
+    {
+        return registerItem(name, description, quantity, price, category_id, "https://cdn.iconscout.com/icon/free/png-512/question-mark-1768084-1502257.png");
+    }
+
+    public Item registerItem( String name, String description, int quantity, BigDecimal price, String category_id, String image_url)
     {
         // Null Checks
         if(name == null || name.equalsIgnoreCase("null"))
@@ -58,11 +74,15 @@ public class ItemManager {
             throw new IllegalArgumentException("Description cannot be null");
         if(price == null)
             throw new IllegalArgumentException("Price cannot be null");
+        if(image_url == null || image_url.equalsIgnoreCase("null"))
+            throw new IllegalArgumentException("ImageURL cannot be null");
         // Length checks
         if(name.length() > SettingUtil.ITEM_NAME_LENGTH)
             throw new IllegalArgumentException("Item name is too long");
         if(description.length() > SettingUtil.ITEM_DESCRIPTION_LENGTH)
             throw new IllegalArgumentException("Item description is too long");
+        if(image_url.length() > SettingUtil.ITEM_IMAGE_LENGTH)
+            throw new IllegalArgumentException("Item ImageURL is too long");
 
         // Negative checks
         if(quantity < 0)
@@ -72,7 +92,7 @@ public class ItemManager {
 
 
         // All checks passed, saving.
-        Item item = itemRepository.save(new Item(name,description,quantity,price));
+        Item item = itemRepository.save(new Item(name,description,quantity,price, image_url));
 
         // Save to category.
         Optional<Category> categoryOptional = findCategoryById(category_id);
@@ -211,6 +231,21 @@ public class ItemManager {
     public Iterable<Item> findAllItemsInList(Page<BigInteger> integers)
     {
         return itemRepository.findAllById(integers);
+    }
+
+
+    private void deleteAllReferencesToItem(BigInteger itemId)
+    {
+        Optional<Item> itemOptional = this.findItemById(itemId);
+        if(!itemOptional.isPresent())
+            throw new IllegalArgumentException("ItemID does not exist.");
+
+        Optional<List<Order>> optionalOrderList = orderRepository.findAllPendingOrdersByItemID(itemId);
+        if(optionalOrderList.isPresent()){
+            List<Order> orders = optionalOrderList.get();
+            orders.parallelStream().forEach( order -> pendingOrderRepository.deleteByOrderId(order.getOrderNumber()));
+        }
+        orderRepository.deleteAllByItemID(itemId);
     }
 
 
