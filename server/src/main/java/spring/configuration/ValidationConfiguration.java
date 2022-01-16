@@ -9,6 +9,11 @@ import spring.util.AccountRegistrationValidator;
 import spring.util.ItemSubmissionValidator;
 import spring.util.LoginFormValidator;
 
+/**
+ * @name ValidationConfiguration
+ *
+ * Controls the validation and data binding of the forms.
+ */
 @Controller
 public class ValidationConfiguration {
     private final AccountRegistrationValidator accountRegistrationValidator;
@@ -22,6 +27,13 @@ public class ValidationConfiguration {
         this.loginFormValidator = loginFormValidator;
     }
 
+    /**
+     * @name dataBinder
+     *
+     * Attaches a validator to each form.
+     *
+     * @param dataBinder The form being validated.
+     */
     @InitBinder
     public void dataBinder( WebDataBinder dataBinder )
     {
