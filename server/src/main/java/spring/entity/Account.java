@@ -18,38 +18,74 @@ import static spring.util.SettingUtil.LAST_NAME_LENGTH;
 import static spring.util.SettingUtil.PASSWORD_LENGTH;
 import static spring.util.SettingUtil.USERNAME_LENGTH;
 
+/**
+ * @name Account
+ *
+ * This class represents the database entity for the users table.
+ */
 @Entity
 @Table(name = "users")
 public class Account {
-
+    /**
+     * The unique username of the user.
+     * This is also used as the primary key.
+     */
     @Id
     @Column(name = "username", length = USERNAME_LENGTH, nullable = false, unique = true)
     private String username;
 
+    /**
+     * The encrypted password of the user.
+     */
     @Column(name = "password", length = PASSWORD_LENGTH, nullable = false)
     private String password;
 
+    /**
+     * Whether the user's account is enabled.
+     */
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
+    /**
+     * First name of the user.
+     */
     @Column(name = "firstname", length = FIRST_NAME_LENGTH, nullable = false)
     private String firstName;
 
+    /**
+     * Last name of the user
+     */
     @Column(name = "lastname", length = LAST_NAME_LENGTH, nullable = false)
     private String lastName;
 
+
+    /**
+     * Email of the user
+     */
     @Column(name = "email", length = EMAIL_LENGTH, nullable = false)
     private String email;
 
+    /**
+     * Address of the user
+     */
     @Column(name = "address", length = ADDRESS_LENGTH, nullable = false)
     private String address;
 
+    /**
+     * Authority level of the user
+     */
     @Column(name = "accounttype", length = ACCOUNT_TYPE_LENGTH, nullable = false)
     private String accountType;
 
+    /**
+     * Set of saved orders associated with the user
+      */
     @OneToMany(mappedBy = "account")
     private Set<Order> saved_orders;
 
+    /**
+     * Set of pending orders associated with the user
+     */
     @OneToMany(mappedBy = "account")
     private Set<PendingOrder> pending_orders;
 
@@ -67,8 +103,15 @@ public class Account {
         this.accountType = Authorities.CUSTOMER.getAuthority();
     }
 
-    public Account( String username, String password, boolean enabled, String firstName, String lastName, String email, String address)
-    {
+    public Account(
+            String username,
+            String password,
+            boolean enabled,
+            String firstName,
+            String lastName,
+            String email,
+            String address
+    ) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
@@ -78,8 +121,17 @@ public class Account {
         this.address = address;
         this.accountType = Authorities.CUSTOMER.getAuthority();
     }
-    public Account( String username, String password, boolean enabled, String firstName, String lastName, String email, String address, String authority)
-    {
+
+    public Account(
+            String username,
+            String password,
+            boolean enabled,
+            String firstName,
+            String lastName,
+            String email,
+            String address,
+            String authority
+    ) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;

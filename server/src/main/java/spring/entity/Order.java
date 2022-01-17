@@ -11,27 +11,48 @@ import javax.persistence.Table;
 import java.math.BigInteger;
 import java.util.Set;
 
+/**
+ * @name Order
+ *
+ * The entity class for the Saved Orders table.
+ */
 @Entity
 @Table(name = "saved_orders", schema = "store")
 public class Order {
-
+    /**
+     * The order id.
+     * This is a unique primary key.
+     * Randomly generated.
+     */
     @Id
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue
     private BigInteger orderNumber;
 
+    /**
+     * The account associated with the order.
+     */
     @ManyToOne( optional = false )
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     private Account account;
 
+    /**
+     * The item in the order.
+     */
     @ManyToOne( optional = false )
     @JoinColumn(name = "item_id", referencedColumnName = "uuid", nullable = false)
     private Item item;
 
+    /**
+     * The quantity of the item in the order.
+     */
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
 
+    /**
+     * The associated pending order.
+     */
     @OneToMany(mappedBy = "order" )
     private Set<PendingOrder> pendingOrders;
 
