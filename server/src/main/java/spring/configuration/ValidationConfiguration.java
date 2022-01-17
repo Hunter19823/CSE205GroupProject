@@ -20,8 +20,11 @@ public class ValidationConfiguration {
     private final ItemSubmissionValidator itemSubmissionValidator;
     private final LoginFormValidator loginFormValidator;
 
-    public ValidationConfiguration( AccountRegistrationValidator accountRegistrationValidator, ItemSubmissionValidator itemSubmissionValidator, LoginFormValidator loginFormValidator)
-    {
+    public ValidationConfiguration(
+            AccountRegistrationValidator accountRegistrationValidator,
+            ItemSubmissionValidator itemSubmissionValidator,
+            LoginFormValidator loginFormValidator
+    ) {
         this.accountRegistrationValidator = accountRegistrationValidator;
         this.itemSubmissionValidator = itemSubmissionValidator;
         this.loginFormValidator = loginFormValidator;
@@ -35,8 +38,9 @@ public class ValidationConfiguration {
      * @param dataBinder The form being validated.
      */
     @InitBinder
-    public void dataBinder( WebDataBinder dataBinder )
-    {
+    public void dataBinder(
+            WebDataBinder dataBinder
+    ) {
         Object data = dataBinder.getTarget();
         if(data != null){
             if(data.getClass() == AccountRegistrationForm.class){

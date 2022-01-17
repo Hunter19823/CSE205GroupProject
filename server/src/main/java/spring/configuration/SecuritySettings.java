@@ -23,8 +23,10 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
     private final AccountRepository accountRepository;
 
-    public SecuritySettings( DataSource dataSource, AccountRepository accountRepository )
-    {
+    public SecuritySettings(
+            DataSource dataSource,
+            AccountRepository accountRepository
+    ) {
         this.dataSource = dataSource;
         this.accountRepository = accountRepository;
     }
@@ -79,14 +81,15 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
      * @throws Exception Unused, but required by the interface.
      */
     @Override
-    protected void configure( HttpSecurity http ) throws Exception
-    {
+    protected void configure(
+            HttpSecurity http
+    ) throws Exception {
         http
                 .csrf().disable()// Disable Cross Site Request Forgery
                 // Controls the access to certain webpages.
                 .authorizeRequests()
                     // Allow all requests to these pages.
-                    .antMatchers("/register*",
+                    .antMatchers("/register*", // TODO Use SettingsUtil for endpoints.
                             "/process_register*",
                             "/login",
                             "/login?error=true",
@@ -104,6 +107,7 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
                 .formLogin(
                         // Use the following configuration for the login page.
                         httpSecurityFormLoginConfigurer -> {
+                            // TODO Use SettingsUtil for endpoints.
                             httpSecurityFormLoginConfigurer.loginPage("/login"); // Set the endpoint for the login page.
                             httpSecurityFormLoginConfigurer.permitAll(); // Allow all users to access the login page.
                             httpSecurityFormLoginConfigurer.failureUrl("/login?error=true"); // Set the failure endpoint for the login page.
@@ -114,6 +118,7 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
                 .logout(
                         // Use the following configuration for the logout page.
                         logoutConfig ->{
+                            // TODO Use SettingsUtil for endpoints.
                             logoutConfig.deleteCookies("JSESSIONID"); // Delete the session cookie.
                             logoutConfig.logoutUrl("/login?logout=true"); // Set the endpoint for the logout page.
                             logoutConfig.clearAuthentication(true); // Clear the authentication on the logout page.
@@ -132,8 +137,9 @@ public class SecuritySettings extends WebSecurityConfigurerAdapter {
      * @throws Exception Unused, but required by the interface.
      */
     @Override
-    public void configure( AuthenticationManagerBuilder builder) throws Exception
-    {
+    public void configure(
+            AuthenticationManagerBuilder builder
+    ) throws Exception {
         builder.authenticationProvider(authenticationProvider());
         //builder.jdbcAuthentication().dataSource(( DataSource ) this.getApplicationContext().getBean("dataSource"));
     }
