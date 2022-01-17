@@ -5,89 +5,164 @@ import org.springframework.security.core.userdetails.UserDetails;
 import spring.entity.Account;
 import spring.util.Authorities;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
+/**
+ * @name AccountDAO
+ *
+ * The AccountDAO class is the data access object for the Account entity.
+ * This DAO is also used in the Spring Security configuration for describing UserDetails.
+ */
 public class AccountDAO implements UserDetails {
-    private Account account;
+    private final Account account;
 
-
-    public AccountDAO( Account account )
-    {
+    public AccountDAO( Account account ) {
         this.account = account;
     }
 
-    public Account getAccount()
-    {
+    /**
+     * @name getAccount
+     *
+     * Returns the account entity.
+     *
+     * @return the account entity.
+     */
+    public Account getAccount() {
         return account;
     }
 
-    public void setAccount( Account account )
-    {
-        this.account = account;
-    }
-
-    public String getFirstName()
-    {
+    /**
+     * @name getFirstName
+     *
+     * Returns the first name of the account.
+     *
+     * @return the first name of the account.
+     */
+    public String getFirstName() {
         return account.getFirstName();
     }
 
-    public String getLastName()
-    {
+    /**
+     * @name getLastName
+     *
+     * Returns the last name of the account.
+     *
+     * @return the last name of the account.
+     */
+    public String getLastName() {
         return account.getLastName();
     }
 
-    public String getEmail()
-    {
+    /**
+     * @name getEmail
+     *
+     * Returns the email of the account.
+     *
+     * @return the email of the account.
+     */
+    public String getEmail() {
         return account.getEmail();
     }
 
-    public String getAddress()
-    {
+    /**
+     * @name getAddress
+     *
+     * Returns the address of the account.
+     *
+     * @return the address of the account.
+     */
+    public String getAddress() {
         return account.getAddress();
     }
 
+    /**
+     * @name getAuthorities
+     *
+     * Get all the authorities for the account.
+     *
+     * @return a collection of GrantedAuthority objects the user has.
+     */
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
-    {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(Authorities.valueOf(account.getAccountType().toUpperCase()));
     }
 
+    /**
+     * @name getPassword
+     *
+     * This method is required by the UserDetails interface.
+     * This method will return an encrypted password once a user has registered.
+     *
+     * @return the encrypted password.
+     */
     @Override
-    public String getPassword()
-    {
+    public String getPassword() {
         return account.getPassword();
     }
 
+    /**
+     * @name getUsername
+     *
+     * This method is required by the UserDetails interface.
+     * This method is used to get the username of the user.
+     *
+     * @return the username of the user.
+     */
     @Override
-    public String getUsername()
-    {
+    public String getUsername() {
         return account.getUsername();
     }
 
+    /**
+     * @name isAccountNonExpired
+     *
+     * This method is required by the UserDetails interface.
+     * This will always return true as long as the account is enabled.
+     *
+     * @return true if the account is enabled.
+     */
     @Override
-    public boolean isAccountNonExpired()
-    {
+    public boolean isAccountNonExpired() {
         return account.isEnabled();
     }
 
+    /**
+     * @name isAccountNonLocked
+     *
+     * This method is required by the UserDetails interface.
+     * This will always return true as long as the account is enabled.
+     *
+     * @return true if the account is enabled.
+     */
     @Override
-    public boolean isAccountNonLocked()
-    {
+    public boolean isAccountNonLocked() {
         return account.isEnabled();
     }
 
+    /**
+     * @name isCredentialsNonExpired
+     *
+     * This method is required by the UserDetails interface.
+     * This will always return true as long as the account is enabled.
+     *
+     * @return true if the account is enabled.
+     */
     @Override
-    public boolean isCredentialsNonExpired()
-    {
+    public boolean isCredentialsNonExpired() {
         return account.isEnabled();
     }
 
+    /**
+     * @name isEnabled
+     *
+     * This method is required by the UserDetails interface.
+     * This method determines if an account is enabled or not.
+     *
+     * @return true if the account is enabled.
+     */
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return account.isEnabled();
     }
 
