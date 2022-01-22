@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Best Bois - Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<!--/*@thymesVar id="viewType" type="java.lang.String"*/-->
+<!--/*@thymesVar id="cart" type="spring.model.ShoppingCartInfo"*/-->
+<div th:replace="fragments/layout.html :: header(authorized=${authorized}, viewType=${viewType})"></div>
+
+<div class="container">
+    <h2 class="h2 p-2 border-bottom" th:text="${viewType.equalsIgnoreCase('customer') ? 'Shopping Cart' : 'Pending Orders'}"></h2>
+    <div class="container">
+        <div class="row">
+            <div th:if="${viewType.equalsIgnoreCase('customer')}" class="col-md-3 mb-4"
+                 th:each="entry : ${cart.orderInfoHashMap}" th:with="orderInfo = ${entry.value}">
+                <form class="card border rounded" th:action="@{/shoppingCart(itemid = ${orderInfo.getItemID()})}" th:object="${orderSubmissionForm}" method = "post">
+                    <div class="card-body">
+                        <h3 class="card-title" th:text="${orderInfo.itemName}"></h3>
+                        <h6 class="card-subtitle text-muted mb-2 " th:text="${'Total: $' + orderInfo.price * orderInfo.quantity}"></h6>
+                        <div class="card-text" th:text="${orderInfo.itemDescription}"></div>
+                        <label class="mt-3" for="item">Qty</label>
+                        <input id="item" class="form-control" type="number" th:placeholder="${orderInfo.getQuantity()}" th:field="*{quantity}">
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="col-sm btn btn-outline-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="card border rounded">
+                    <div class="card-footer text-center">
+                        <h6 th:if="${orderInfo.purchased}"><b>This order is being processed!</b></h6>
+                        <p style="font-size: 12px" class="text-mute" th:if="${orderInfo.purchased}">Update desired quantity before in store pick up.</p>
+                        <form class="d-grid gap-2" th:if="!${orderInfo.purchased}" th:action="@{/purchase(orderid=${orderInfo.id})}" method="post">
+                            <button type="submit" class="btn btn-primary">Purchase</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="!${viewType.equalsIgnoreCase('customer')}" class="col-md-3 mb-4"
+                 th:each="order : ${pendingOrders}">
+
+                <div class="card-body">
+                    <h3 class="card-title" th:text="${order.order.item.name}"></h3>
+                    <h6 class="card-subtitle text-muted mb-2 " th:text="${'Total: $' + order.order.item.price * order.order.quantity}"></h6>
+                    <div class="card-text" th:text="${order.order.item.description}"></div>
+                    <label class="mt-3" for="item">Qty</label>
+                    <h6 id="item" class="form-control" th:text="${order.order.quantity}"></h6>
+                    <h6 th:text="${'Username: ' + order.account.username}"></h6>
+                    <h6 th:text="${'Full Name: ' + order.account.firstName+' '+order.account.lastName}"></h6>
+                    <h6 th:text="${'Address: ' + order.account.address}"></h6>
+                    <h6 th:text="${'Email: ' + order.account.email}"></h6>
+                </div>
+
+                <form class="card border rounded" th:action="@{/processOrder(pendingid = ${order.getPendingOrderNumber()})}" method = "post">
+                    <div class="card-footer">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="col-sm btn btn-outline-primary">Resolve Order</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div th:if="${viewType.equalsIgnoreCase('customer') && cart.orderInfoHashMap.size() == 0}">
+                Your cart is empty! Why not <a href="/">shop</a> around for some things to buy?
+            </div>
+            <div th:if="${!viewType.equalsIgnoreCase('customer') && pendingOrders != null && pendingOrders.isEmpty()}">
+                There are currently no pending orders, please check back later!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+</body>
+</html>
